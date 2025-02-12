@@ -47,7 +47,7 @@ export interface GetUserPacket extends Packet<UserPacket> {
   id: number;
 }
 
-type User = {
+export type User = {
   name: string;
   id: number;
   avatar_url: string;
