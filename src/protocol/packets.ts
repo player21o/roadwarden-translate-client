@@ -11,6 +11,7 @@ export const enum Tracks {
   user,
   orfile,
   file,
+  discordlink,
 }
 
 export type TrackToPacketMap = {
@@ -20,6 +21,7 @@ export type TrackToPacketMap = {
   [Tracks.user]: GetUserPacket;
   [Tracks.orfile]: GetOriginalFilePacket;
   [Tracks.file]: GetFilePacket;
+  [Tracks.discordlink]: GetDiscordAuthLink;
 };
 
 export type TrackToPacket<T extends Tracks> = TrackToPacketMap[T];
@@ -35,6 +37,7 @@ export type FullPacket<T extends Packet = Packet> = {
 export interface Packet<AnswerType = any> {
   status?: Status;
   answer?: (p: AnswerType) => Promise<Packet>; // Changed 'this' to 'Packet'
+  ok?: boolean;
 }
 
 export interface LoginPacket extends Packet<LoginPacket> {
@@ -86,4 +89,8 @@ export interface FilePacket extends Packet {
 
 export interface ExitPacket extends Packet {
   exit: string;
+}
+
+export interface GetDiscordAuthLink extends Packet<GetDiscordAuthLink> {
+  url?: string;
 }
