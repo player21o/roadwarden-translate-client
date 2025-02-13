@@ -1,23 +1,8 @@
-import { useContext, useEffect } from "react";
-import { UserContext } from "../contexts/UserContext";
 import Spinner from "./Spinner";
-import { prot } from "../protocol/client";
-import { Tracks } from "../protocol/packets";
-import { useNavigate } from "react-router";
+import { useAuthUser } from "../hooks/AuthUser";
 
 const Login = () => {
-  const { user, setUser } = useContext(UserContext);
-
-  useEffect(() => {
-    prot.send({}, Tracks.discordlink).then((answer) => {
-      console.log(answer);
-      if (answer.ok!) window.location.href = answer.url!;
-    });
-
-    //prot.send({ token: "sss" }, Tracks.login).then((answer) => {
-    //  console.log(answer.ok);
-    //});
-  });
+  const auth = useAuthUser();
 
   /*
   return (
@@ -36,7 +21,7 @@ const Login = () => {
   );
   */
 
-  return <Spinner />;
+  return auth != 200 ? <Spinner /> : null;
 };
 
 export default Login;
