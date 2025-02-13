@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import LoginProtected from "./components/LoginProtected";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import { ContextUser, UserContext } from "./contexts/UserContext";
+import { UserContext } from "./contexts/UserContext";
 import { useState } from "react";
 
 /*
