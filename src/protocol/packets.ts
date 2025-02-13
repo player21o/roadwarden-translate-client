@@ -1,6 +1,7 @@
 export const enum Status {
   success = 200,
   failure = 400,
+  rate_limit = 429,
 }
 
 export const enum Tracks {
@@ -27,7 +28,7 @@ export type extractGeneric<Type> = Type extends Packet<infer X> ? X : never;
 
 export type FullPacket<T extends Packet = Packet> = {
   req_id: number;
-  track_id?: number;
+  track_id?: Tracks;
   packet: T;
 };
 
@@ -38,7 +39,7 @@ export interface Packet<AnswerType = any> {
 
 export interface LoginPacket extends Packet<LoginPacket> {
   method?: "session" | "discord";
-  token: string;
+  token?: string;
 }
 
 export interface LogoutPacket extends Packet<LogoutPacket> {}

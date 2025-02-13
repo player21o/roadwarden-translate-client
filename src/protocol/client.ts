@@ -1,4 +1,4 @@
-import { Packet } from "./packets";
+import { Packet, Tracks, TrackToPacket } from "./packets";
 import { Protocol, SendPacketArgs } from "./protocol";
 import { WsType } from "./ws_type";
 
@@ -18,8 +18,8 @@ class ClientProtocol extends Protocol {
     };
   }
 
-  public send<P extends Packet>(args: SendPacketArgs<P>) {
-    return this.send_packet(args, this.ws);
+  public send<T extends Tracks>(packet: TrackToPacket<T>, track: T) {
+    return this.send_packet({ packet: packet, track: track }, this.ws);
   }
 }
 
