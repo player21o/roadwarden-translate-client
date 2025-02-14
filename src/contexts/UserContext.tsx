@@ -1,9 +1,9 @@
 import { createContext } from "react";
 import { User } from "../protocol/packets";
 
-export type ContextUser = Partial<User> & {
-  authenticated: boolean;
-};
+export type ContextUser =
+  | ({ authenticated: true } & User)
+  | ({ authenticated: false } & Partial<User>);
 
 export const UserContext = createContext<{
   user: ContextUser;

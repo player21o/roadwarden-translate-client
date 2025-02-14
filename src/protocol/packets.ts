@@ -15,7 +15,7 @@ export const enum Tracks {
 }
 
 export type TrackToPacketMap = {
-  [Tracks.login]: LoginPacket;
+  [Tracks.login]: MakeLoginPacket;
   [Tracks.logout]: LogoutPacket;
   [Tracks.info]: GetInfoPacket;
   [Tracks.user]: GetUserPacket;
@@ -40,15 +40,20 @@ export interface Packet<AnswerType = any> {
   ok?: boolean;
 }
 
-export interface LoginPacket extends Packet<LoginPacket> {
-  method?: "session" | "discord";
+export interface MakeLoginPacket extends Packet<LoginPacket> {
+  method: "session" | "discord";
   token?: string;
+}
+
+export interface LoginPacket extends Packet<any> {
+  token?: string;
+  user_id?: string;
 }
 
 export interface LogoutPacket extends Packet<LogoutPacket> {}
 
 export interface GetUserPacket extends Packet<UserPacket> {
-  id: number;
+  id: string;
 }
 
 export type User = {
