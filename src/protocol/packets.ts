@@ -24,6 +24,16 @@ export type TrackToPacketMap = {
   [Tracks.discordlink]: GetDiscordAuthLink;
 };
 
+export type OkPacket<Data, AnswerType = any> = Packet<AnswerType> &
+  (
+    | ({
+        ok: true;
+      } & Data)
+    | ({
+        ok?: false | undefined;
+      } & Partial<Data>)
+  );
+
 export type TrackToPacket<T extends Tracks> = TrackToPacketMap[T];
 
 export type extractGeneric<Type> = Type extends Packet<infer X> ? X : never;
@@ -42,13 +52,10 @@ export interface Packet<AnswerType = any> {
 
 export interface MakeLoginPacket extends Packet<LoginPacket> {
   method: "session" | "discord";
-  token?: string;
+  token: string;
 }
 
-export interface LoginPacket extends Packet<any> {
-  token?: string;
-  user_id?: string;
-}
+export type LoginPacket = OkPacket<{ token: string; user_id: string }>;
 
 export interface LogoutPacket extends Packet<LogoutPacket> {}
 
@@ -58,11 +65,12 @@ export interface GetUserPacket extends Packet<UserPacket> {
 
 export type User = {
   name: string;
-  id: number;
+  id: string;
   avatar_url: string;
 };
 
-export type UserPacket = Packet & Partial<User>;
+//export type UserPacket = Packet & Partial<User>;
+export type UserPacket = OkPacket<User>;
 
 export interface GetInfoPacket extends Packet<InfoPacket> {}
 

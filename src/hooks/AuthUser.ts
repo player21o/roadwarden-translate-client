@@ -17,14 +17,14 @@ export function useAuthUser() {
       prot
         .send({ method: "session", token: session }, Tracks.login)
         .then((answer) => {
-          if (answer.ok!) {
+          if (answer.ok) {
             prot.send({ id: answer.user_id! }, Tracks.user).then((usr) => {
-              if (usr.ok!) {
+              if (usr.ok) {
                 setUser({
                   authenticated: true,
-                  id: usr.id!,
-                  avatar_url: usr.avatar_url!,
-                  name: usr.name!,
+                  id: usr.id,
+                  avatar_url: usr.avatar_url,
+                  name: usr.name,
                 });
                 setStatus(200);
               }
@@ -45,14 +45,14 @@ export function useAuthUser() {
             setStatus(answer.status!);
             //localStorage.setItem("session", "ss");
             //lc.set("session", "ss");
-            if (answer.ok!) window.location.href = answer.url!;
+            if (answer.ok) window.location.href = answer.url!;
           });
         } else {
           prot
             .send({ method: "discord", token: code }, Tracks.login)
             .then((answer) => {
-              if (answer.ok!) {
-                session_login(answer.token!);
+              if (answer.ok) {
+                session_login(answer.token);
               }
             });
         }

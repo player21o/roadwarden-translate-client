@@ -38,7 +38,7 @@ export class Protocol {
   protected send_packet<P extends Packet>(
     { packet, req_id, track }: SendPacketArgs<P>,
     ws: WsType
-  ): Promise<extractGeneric<P>> {
+  ): Promise<Required<Pick<extractGeneric<P>, "ok">> & extractGeneric<P>> {
     // Updated return type
     const full_packet: FullPacket<P> = {
       packet: packet,
@@ -67,6 +67,7 @@ export class Protocol {
 
       delete this.resolves[decoded_packet.req_id];
     } else if (decoded_packet.track_id !== undefined) {
+      /*
       if (
         Date.now() >=
         this.event_emitter_rate_limits[decoded_packet.track_id]!.last_packet
@@ -84,6 +85,12 @@ export class Protocol {
       } else {
         built_packet.answer!({ status: Status.rate_limit } as Packet);
       }
+        */
+      this.event_emitter.emit(
+        decoded_packet.track_id.toString(),
+        built_packet,
+        ws
+      );
     }
   }
 
@@ -95,10 +102,12 @@ export class Protocol {
     ) => any,
     rate_limit = 0
   ) {
+    /*
     this.event_emitter_rate_limits[track_num] = {
       interval: rate_limit,
       last_packet: Date.now(),
     };
+    */
 
     return this.event_emitter.on(track_num.toString(), callback);
   }

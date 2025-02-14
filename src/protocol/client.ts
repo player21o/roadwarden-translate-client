@@ -1,5 +1,5 @@
-import { Packet, Tracks, TrackToPacket } from "./packets";
-import { Protocol, SendPacketArgs } from "./protocol";
+import { Tracks, TrackToPacket } from "./packets";
+import { Protocol } from "./protocol";
 import { WsType } from "./ws_type";
 
 class ClientProtocol extends Protocol {
