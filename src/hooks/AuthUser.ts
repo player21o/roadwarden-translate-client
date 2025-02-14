@@ -6,7 +6,7 @@ import { lc } from "../utils/localstorage";
 import { useSearchParams } from "react-router";
 
 export function useAuthUser() {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [status, setStatus] = useState(0);
   const [searchParams] = useSearchParams();
 
@@ -26,7 +26,9 @@ export function useAuthUser() {
         prot
           .send({ method: "discord", token: code }, Tracks.login)
           .then((answer) => {
-            console.log(answer);
+            if (answer.ok!) {
+              lc.set("session", answer.token!);
+            }
           });
       }
     } else {
