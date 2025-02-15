@@ -12,6 +12,9 @@ export default {
         brightpale: "#f6d6be",
         pale: "#c2a58e",
       },
+      fontFamily: {
+        philosopher: "Philosopher",
+      },
     },
   },
   plugins: [],

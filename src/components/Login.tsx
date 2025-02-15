@@ -1,5 +1,6 @@
 import Spinner from "./Spinner";
 import { useAuthUser } from "../hooks/AuthUser";
+import { Navigate } from "react-router";
 
 const Login = () => {
   const auth = useAuthUser();
@@ -21,7 +22,7 @@ const Login = () => {
   );
   */
 
-  return auth != 200 ? <Spinner /> : null;
+  return auth != 200 ? <Spinner /> : <Navigate to="/home" />;
 };
 
 export default Login;

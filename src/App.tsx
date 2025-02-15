@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import { UserContext } from "./contexts/UserContext";
 import { useState } from "react";
+import Landing from "./components/Landing";
 
 /*
 function App() {
@@ -30,14 +31,14 @@ function App() {
   */
 
 function App() {
-  const [user, setUser] = useState({ authenticated: false });
+  const [user, setUser] = useState({ authenticated: false, id: -1 });
   const value = { user, setUser };
 
   return (
     <UserContext.Provider value={value}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<Landing />} />
           <Route
             path="/home"
             element={
