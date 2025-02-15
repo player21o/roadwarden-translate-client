@@ -18,17 +18,8 @@ export function useAuthUser() {
         .send({ method: "session", token: session }, Tracks.login)
         .then((answer) => {
           if (answer.ok) {
-            prot.send({ id: answer.user_id! }, Tracks.user).then((usr) => {
-              if (usr.ok) {
-                setUser({
-                  authenticated: true,
-                  id: usr.id,
-                  avatar_url: usr.avatar_url,
-                  name: usr.name,
-                });
-                setStatus(200);
-              }
-            });
+            setStatus(200);
+            setUser({ id: answer.user_id!, authenticated: true });
           }
         });
     };

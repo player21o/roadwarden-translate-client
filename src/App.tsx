@@ -31,7 +31,7 @@ function App() {
   */
 
 function App() {
-  const [user, setUser] = useState({ authenticated: false, id: -1 });
+  const [user, setUser] = useState({ authenticated: false, id: "-1" });
   const value = { user, setUser };
 
   return (

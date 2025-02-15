@@ -1,19 +1,34 @@
+import { useContext } from "react";
 import HomeCard from "./HomeCard";
+import { UserContext } from "../contexts/UserContext";
+import useGetUser from "../hooks/GetUser";
+import { UserPermission } from "../protocol/packets";
 
 const Home = () => {
-  return (
+  const {
+    user: { id },
+  } = useContext(UserContext);
+
+  const user = useGetUser(id);
+
+  return user != null ? (
     <>
       <h1 className="m-10">Главная</h1>
       <div className="flex gap-6 grid-cols-3">
         <HomeCard text="Редактор">
-          <h3 className="italic">beach.rpy</h3>
-          <h3>prologue.rpy</h3>
+          {user.permissions
+            .filter(([p]) => p == UserPermission.file)
+            .map(([_, file_name]) => (
+              <h3 key={file_name}>{file_name}</h3>
+            ))}
         </HomeCard>
-        <HomeCard text="Профиль"></HomeCard>
+        <HomeCard text="Профиль">
+          <img src={user.avatar_url} alt="" />
+        </HomeCard>
         <HomeCard text="Статистика"></HomeCard>
       </div>
     </>
-  );
+  ) : null;
 };
 
 export default Home;

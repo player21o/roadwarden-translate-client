@@ -63,10 +63,16 @@ export interface GetUserPacket extends Packet<UserPacket> {
   id: string;
 }
 
+export const enum UserPermission {
+  file,
+  admin,
+}
+
 export type User = {
   name: string;
   id: string;
   avatar_url: string;
+  permissions: [UserPermission, any?][];
 };
 
 //export type UserPacket = Packet & Partial<User>;

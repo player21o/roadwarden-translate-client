@@ -7,9 +7,9 @@ interface Props {
 }
 
 const LoginProtected = ({ children }: Props) => {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  return user.authenticated ? children : <Navigate to="/" />;
+  return user.authenticated ? children : <Navigate to="/login" />;
 };
 
 export default LoginProtected;
