@@ -23,7 +23,12 @@ const Home = () => {
             ))}
         </HomeCard>
         <HomeCard text="Профиль">
-          <img src={user.avatar_url} alt="" />
+          <img
+            src={user.avatar_url}
+            alt=""
+            className="m-auto rounded-full scale-75"
+          />
+          <h3>Недавние действия</h3>
         </HomeCard>
         <HomeCard text="Статистика"></HomeCard>
       </div>

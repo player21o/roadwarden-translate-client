@@ -1,7 +1,4 @@
-//import { useEffect, useState } from "react";
 import "./App.css";
-import { prot } from "./protocol/client";
-//import { GetUserPacket, Tracks } from "./protocol/packets";
 import { BrowserRouter, Route, Routes } from "react-router";
 import LoginProtected from "./components/LoginProtected";
 import Home from "./components/Home";
@@ -9,6 +6,7 @@ import Login from "./components/Login";
 import { UserContext } from "./contexts/UserContext";
 import { useState } from "react";
 import Landing from "./components/Landing";
+import ConnectionManager from "./components/ConnectionManager";
 
 /*
 function App() {
@@ -36,20 +34,22 @@ function App() {
 
   return (
     <UserContext.Provider value={value}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route
-            path="/home"
-            element={
-              <LoginProtected>
-                <Home />
-              </LoginProtected>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
+      <ConnectionManager>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route
+              path="/home"
+              element={
+                <LoginProtected>
+                  <Home />
+                </LoginProtected>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </BrowserRouter>
+      </ConnectionManager>
     </UserContext.Provider>
   );
 }
