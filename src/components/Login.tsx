@@ -22,7 +22,15 @@ const Login = () => {
   );
   */
 
-  return auth != 200 ? <Spinner /> : <Navigate to="/home" />;
+  return auth != 200 ? (
+    auth != 400 ? (
+      <Spinner />
+    ) : (
+      <Navigate to="/" />
+    )
+  ) : (
+    <Navigate to="/home" />
+  );
 };
 
 export default Login;

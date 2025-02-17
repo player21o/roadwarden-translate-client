@@ -6,6 +6,7 @@ export default function useGetUser(id: string) {
   const [user, setUser] = useState<null | User>(null);
 
   useEffect(() => {
+    console.log("get");
     prot.send({ id: id }, Tracks.user).then((answer) => {
       if (answer.ok) {
         setUser({
@@ -16,7 +17,7 @@ export default function useGetUser(id: string) {
         });
       }
     });
-  });
+  }, []);
 
   return user;
 }

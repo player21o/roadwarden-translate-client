@@ -19,7 +19,13 @@ export function useAuthUser() {
         .then((answer) => {
           if (answer.ok) {
             setStatus(200);
+
             setUser({ id: answer.user_id!, authenticated: true });
+            console.log("success");
+          } else {
+            console.log("error");
+            lc.remove("session");
+            setStatus(400);
           }
         });
     };
@@ -33,7 +39,7 @@ export function useAuthUser() {
         if (code == null) {
           prot.send({}, Tracks.discordlink).then((answer) => {
             //console.log(answer);
-            setStatus(answer.status!);
+            //setStatus(answer.status!);
             //localStorage.setItem("session", "ss");
             //lc.set("session", "ss");
             if (answer.ok) window.location.href = answer.url!;
@@ -51,7 +57,7 @@ export function useAuthUser() {
         session_login(session);
       }
     }
-  });
+  }, []);
 
   return status;
 }

@@ -1,18 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import HomeCard from "./HomeCard";
 import { UserContext } from "../contexts/UserContext";
 import useGetUser from "../hooks/GetUser";
-import { UserPermission } from "../protocol/packets";
+import { Tracks, UserPermission } from "../protocol/packets";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
-  Title,
+  //Title,
   Tooltip,
-  Legend,
+  //Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { prot } from "../protocol/client";
 
 ChartJS.register(
   CategoryScale,
@@ -28,6 +29,31 @@ const Home = () => {
   } = useContext(UserContext);
 
   const user = useGetUser(id);
+
+  useEffect(() => {
+    const today = new Date();
+    const that_day = new Date(new Date().setDate(new Date().getDate() - 60));
+
+    //console.log("wtf");
+
+    prot
+      .send(
+        {
+          start: {
+            year: today.getFullYear(),
+            month: today.getMonth(),
+            day: today.getDate(),
+          },
+          end: {
+            year: that_day.getFullYear(),
+            month: that_day.getMonth(),
+            day: that_day.getDate(),
+          },
+        },
+        Tracks.stats
+      )
+      .then((an) => console.log(an));
+  }, []);
 
   return user != null ? (
     <>
@@ -52,7 +78,7 @@ const Home = () => {
           <h3>За неделю</h3>
           <Bar
             data={{
-              labels: [...Array(7).keys()]
+              labels: [...Array(30).keys()]
                 .reverse()
                 .map((d) =>
                   new Date(
@@ -68,13 +94,14 @@ const Home = () => {
               ],
             }}
             options={{
-              scales: { x: { ticks: { display: true, autoSkip: false } } },
+              //scales: { x: { ticks: { display: true, autoSkip: false } } },
               responsive: true,
               plugins: {
                 title: { display: false, text: "Переведённые карточки" },
               },
             }}
             height={200}
+            //width={1000}
           />
         </HomeCard>
       </div>

@@ -12,6 +12,7 @@ export const enum Tracks {
   orfile,
   file,
   discordlink,
+  stats,
 }
 
 export type TrackToPacketMap = {
@@ -22,6 +23,7 @@ export type TrackToPacketMap = {
   [Tracks.orfile]: GetOriginalFilePacket;
   [Tracks.file]: GetFilePacket;
   [Tracks.discordlink]: GetDiscordAuthLink;
+  [Tracks.stats]: GetStatsPacket;
 };
 
 export type OkPacket<Data, AnswerType = any> = Packet<AnswerType> &
@@ -33,6 +35,12 @@ export type OkPacket<Data, AnswerType = any> = Packet<AnswerType> &
         ok?: false | undefined;
       } & Partial<Data>)
   );
+
+export interface PacketDate {
+  year: number;
+  month: number;
+  day: number;
+}
 
 export type TrackToPacket<T extends Tracks> = TrackToPacketMap[T];
 
@@ -113,3 +121,10 @@ export interface ExitPacket extends Packet {
 export interface GetDiscordAuthLink extends Packet<GetDiscordAuthLink> {
   url?: string;
 }
+
+export interface GetStatsPacket extends Packet<StatsPacket> {
+  start: PacketDate;
+  end: PacketDate;
+}
+
+export type StatsPacket = OkPacket<{ data: number[] }>;
