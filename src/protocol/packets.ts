@@ -1,4 +1,6 @@
-export const enum Status {
+import { z } from "zod";
+
+export enum Status {
   success = 200,
   failure = 400,
   rate_limit = 429,
@@ -46,10 +48,10 @@ export type TrackToPacket<T extends Tracks> = TrackToPacketMap[T];
 
 export type extractGeneric<Type> = Type extends Packet<infer X> ? X : never;
 
-export type FullPacket<T extends Packet = Packet> = {
+export type FullPacket = {
   req_id: number;
-  track_id?: Tracks;
-  packet: T;
+  track_id?: keyof typeof tracks;
+  packet: any;
 };
 
 export interface Packet<AnswerType = any> {
@@ -71,17 +73,10 @@ export interface GetUserPacket extends Packet<UserPacket> {
   id: string;
 }
 
-export const enum UserPermission {
+export enum UserPermission {
   file,
   admin,
 }
-
-export type User = {
-  name: string;
-  id: string;
-  avatar_url: string;
-  permissions: [UserPermission, any?][];
-};
 
 //export type UserPacket = Packet & Partial<User>;
 export type UserPacket = OkPacket<User>;
@@ -128,3 +123,85 @@ export interface GetStatsPacket extends Packet<StatsPacket> {
 }
 
 export type StatsPacket = OkPacket<{ data: number[] }>;
+
+const Response = z.object({
+  status: z.nativeEnum(Status),
+});
+
+const Login = {
+  request: z.object({
+    method: z.union([z.literal("discord"), z.literal("session")]),
+    token: z.string(),
+  }),
+  response: Response.extend({
+    session_token: z.string().optional(),
+    user_id: z.string().optional(),
+  }),
+};
+
+const GetInfo = {
+  request: z.object({
+    type: z.union([
+      z.literal("discord_auth_link"),
+      z.literal("translation_stats"),
+    ]),
+  }),
+  response: Response.extend({}).and(
+    z
+      .object({
+        translation_stats: z
+          .object({
+            all: z.number(),
+            translated: z.number(),
+          })
+          .optional(),
+      })
+      .or(
+        z
+          .object({
+            link: z.string(),
+          })
+          .optional()
+      )
+  ),
+};
+
+const User = z.object({
+  name: z.string(),
+  id: z.string(),
+  avatar_url: z.string(),
+  permissions: z
+    .tuple([z.nativeEnum(UserPermission)])
+    .rest(z.any())
+    .array(),
+});
+
+export type User = z.infer<typeof User>;
+
+//
+
+const GetUser = {
+  request: z.object({
+    user_id: z.string(),
+  }),
+  response: Response.extend({
+    user: User.optional(),
+  }),
+};
+
+const GetStats = {
+  request: z.object({
+    start: z.string().pipe(z.coerce.date()),
+    end: z.string().pipe(z.coerce.date()),
+  }),
+  response: Response.extend({
+    data: z.number().array(),
+  }),
+};
+
+export const tracks = {
+  login: Login,
+  get_info: GetInfo,
+  get_user: GetUser,
+  get_stats: GetStats,
+};

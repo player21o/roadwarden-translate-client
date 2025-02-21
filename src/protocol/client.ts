@@ -1,4 +1,5 @@
-import { Tracks, TrackToPacket } from "./packets";
+import { z } from "zod";
+import { tracks, Tracks, TrackToPacket } from "./packets";
 import { Protocol } from "./protocol";
 import { WsType } from "./ws_type";
 
@@ -35,8 +36,11 @@ class ClientProtocol extends Protocol {
     this.ws.ws.onclose = this.closing_func;
   }
 
-  public send<T extends Tracks>(packet: TrackToPacket<T>, track: T) {
-    return this.send_packet({ packet: packet, track: track }, this.ws);
+  public send<T extends keyof typeof tracks>(
+    track: T,
+    packet: z.infer<(typeof tracks)[T]["request"]>
+  ) {
+    return this.send_packet<T>({ packet: packet, track: track }, this.ws);
   }
 }
 

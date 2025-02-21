@@ -2,17 +2,20 @@ import { decode, encode } from "msgpack-lite";
 import {
   extractGeneric,
   Status,
+  tracks,
   Tracks,
   TrackToPacket,
   type FullPacket,
   type Packet,
 } from "./packets";
+//import { ZodPacket } from "./packets";
 import { WsType } from "./ws_type";
 import { EventEmitter } from "node:events";
+import { z } from "zod";
 
-export interface SendPacketArgs<T extends Packet> {
-  packet: T; // Changed parameter type from Packet to P
-  track?: Tracks;
+export interface SendPacketArgs {
+  packet: any; // Changed parameter type from Packet to P
+  track?: keyof typeof tracks;
   req_id?: number;
 }
 
@@ -24,23 +27,22 @@ export class Protocol {
     [key in Tracks]?: { interval: number; last_packet: number };
   } = {};
 
-  private send_full_packet<P extends Packet>(
-    full_packet: FullPacket<P>,
-    ws: WsType
-  ) {
-    return new Promise<extractGeneric<P>>((resolve) => {
-      // Updated return type
-      this.resolves[full_packet.req_id] = resolve;
-      ws.send(this.encode_packet(full_packet));
-    });
+  private send_full_packet(full_packet: FullPacket, ws: WsType) {
+    return new Promise<(typeof full_packet)["packet"]["response"]>(
+      (resolve) => {
+        // Updated return type
+        this.resolves[full_packet.req_id] = resolve;
+        ws.send(this.encode_packet(full_packet));
+      }
+    );
   }
 
-  protected send_packet<P extends Packet>(
-    { packet, req_id, track }: SendPacketArgs<P>,
+  public send_packet<T extends keyof typeof tracks>(
+    { packet, req_id, track }: SendPacketArgs,
     ws: WsType
-  ): Promise<Required<Pick<extractGeneric<P>, "ok">> & extractGeneric<P>> {
+  ): Promise<z.infer<(typeof tracks)[T]["response"]>> {
     // Updated return type
-    const full_packet: FullPacket<P> = {
+    const full_packet: FullPacket = {
       packet: packet,
       req_id: Math.round(Math.random() * 1000),
     };
@@ -56,14 +58,13 @@ export class Protocol {
 
   protected receive_packet(packet: Uint8Array, ws: WsType) {
     const decoded_packet: FullPacket = decode(packet);
-    decoded_packet.packet.ok = decoded_packet.packet.status! == Status.success;
-    const built_packet = this.build_packet(decoded_packet, ws);
+    //decoded_packet.packet.ok = decoded_packet.packet.status! == Status.success;
     if (decoded_packet.req_id in this.resolves) {
       let resolve = this.resolves[decoded_packet.req_id] as (
-        packet: Packet
+        packet: any
       ) => void;
 
-      resolve(built_packet);
+      resolve(decoded_packet.packet);
 
       delete this.resolves[decoded_packet.req_id];
     } else if (decoded_packet.track_id !== undefined) {
@@ -86,18 +87,38 @@ export class Protocol {
         built_packet.answer!({ status: Status.rate_limit } as Packet);
       }
         */
-      this.event_emitter.emit(
-        decoded_packet.track_id.toString(),
-        built_packet,
-        ws
-      );
+      if (
+        decoded_packet.track_id in tracks &&
+        tracks[decoded_packet.track_id]["request"].safeParse(
+          decoded_packet.packet
+        ).success
+      )
+        this.event_emitter.emit(
+          decoded_packet.track_id.toString(),
+          {
+            data: decoded_packet.packet,
+            answer: (pack: any) =>
+              this.send_full_packet(
+                {
+                  packet: pack,
+                  req_id: decoded_packet.req_id,
+                  track_id: decoded_packet.track_id,
+                },
+                ws
+              ),
+          },
+          ws
+        );
     }
   }
 
-  public listen<T extends Tracks>(
-    track_num: T,
+  public listen<T extends keyof typeof tracks>(
+    track: T,
     callback: (
-      packet: Required<Pick<TrackToPacket<T>, "answer">> & TrackToPacket<T>,
+      packet: {
+        data: z.infer<(typeof tracks)[T]["request"]>;
+        answer: (arg0: z.infer<(typeof tracks)[T]["response"]>) => Promise<any>;
+      },
       ws: WsType
     ) => any,
     rate_limit = 0
@@ -109,21 +130,10 @@ export class Protocol {
     };
     */
 
-    return this.event_emitter.on(track_num.toString(), callback);
+    return this.event_emitter.on(track.toString(), callback);
   }
 
   private encode_packet(packet: FullPacket) {
     return encode(packet);
-  }
-
-  private build_packet({ req_id, packet }: FullPacket, ws: WsType) {
-    //first number - req_id, second - track_id, third - Packet data
-    packet.answer = (p: Packet) => {
-      return this.send_full_packet(
-        { req_id: req_id, packet: p },
-        ws
-      ) as Promise<any>;
-    };
-    return packet;
   }
 }

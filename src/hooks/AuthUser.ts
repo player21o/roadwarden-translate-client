@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { prot } from "../protocol/client";
-import { Tracks } from "../protocol/packets";
 import { lc } from "../utils/localstorage";
 import { useSearchParams } from "react-router";
 
@@ -15,12 +14,12 @@ export function useAuthUser() {
       lc.set("session", session);
 
       prot
-        .send({ method: "session", token: session }, Tracks.login)
+        .send("login", { method: "session", token: session })
         .then((answer) => {
-          if (answer.ok) {
+          if (answer.user_id !== undefined) {
             setStatus(200);
 
-            setUser({ id: answer.user_id!, authenticated: true });
+            setUser({ id: answer.user_id, authenticated: true });
             console.log("success");
           } else {
             console.log("error");
@@ -37,19 +36,23 @@ export function useAuthUser() {
         let code = searchParams.get("code");
 
         if (code == null) {
-          prot.send({}, Tracks.discordlink).then((answer) => {
-            //console.log(answer);
-            //setStatus(answer.status!);
-            //localStorage.setItem("session", "ss");
-            //lc.set("session", "ss");
-            if (answer.ok) window.location.href = answer.url!;
-          });
+          prot
+            .send("get_info", { type: "discord_auth_link" })
+            .then((answer) => {
+              //console.log(answer);
+              //setStatus(answer.status!);
+              //localStorage.setItem("session", "ss");
+              //lc.set("session", "ss");
+              if ("link" in answer) {
+                window.location.href = answer.link;
+              }
+            });
         } else {
           prot
-            .send({ method: "discord", token: code }, Tracks.login)
+            .send("login", { method: "discord", token: code })
             .then((answer) => {
-              if (answer.ok) {
-                session_login(answer.token);
+              if (answer.user_id !== undefined) {
+                session_login(answer.session_token);
               }
             });
         }
