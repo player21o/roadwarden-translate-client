@@ -1,13 +1,5 @@
 import { decode, encode } from "msgpack-lite";
-import {
-  extractGeneric,
-  Status,
-  tracks,
-  Tracks,
-  TrackToPacket,
-  type FullPacket,
-  type Packet,
-} from "./packets";
+import { tracks, type FullPacket } from "./packets";
 //import { ZodPacket } from "./packets";
 import { WsType } from "./ws_type";
 import { EventEmitter } from "node:events";
@@ -24,7 +16,7 @@ export class Protocol {
 
   private event_emitter = new EventEmitter();
   private event_emitter_rate_limits: {
-    [key in Tracks]?: { interval: number; last_packet: number };
+    [key in keyof typeof tracks]?: { interval: number; last_packet: number };
   } = {};
 
   private send_full_packet(full_packet: FullPacket, ws: WsType) {
@@ -92,7 +84,7 @@ export class Protocol {
         tracks[decoded_packet.track_id]["request"].safeParse(
           decoded_packet.packet
         ).success
-      )
+      ) {
         this.event_emitter.emit(
           decoded_packet.track_id.toString(),
           {
@@ -109,6 +101,7 @@ export class Protocol {
           },
           ws
         );
+      }
     }
   }
 

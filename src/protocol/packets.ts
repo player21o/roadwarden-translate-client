@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export enum Status {
-  success = 200,
-  failure = 400,
-  rate_limit = 429,
-}
-
+/*
 export const enum Tracks {
   login,
   logout,
@@ -48,11 +43,7 @@ export type TrackToPacket<T extends Tracks> = TrackToPacketMap[T];
 
 export type extractGeneric<Type> = Type extends Packet<infer X> ? X : never;
 
-export type FullPacket = {
-  req_id: number;
-  track_id?: keyof typeof tracks;
-  packet: any;
-};
+
 
 export interface Packet<AnswerType = any> {
   status?: Status;
@@ -71,11 +62,6 @@ export interface LogoutPacket extends Packet<LogoutPacket> {}
 
 export interface GetUserPacket extends Packet<UserPacket> {
   id: string;
-}
-
-export enum UserPermission {
-  file,
-  admin,
 }
 
 //export type UserPacket = Packet & Partial<User>;
@@ -123,6 +109,24 @@ export interface GetStatsPacket extends Packet<StatsPacket> {
 }
 
 export type StatsPacket = OkPacket<{ data: number[] }>;
+*/
+
+export type FullPacket = {
+  req_id: number;
+  track_id?: keyof typeof tracks;
+  packet: any;
+};
+
+export enum Status {
+  success = 200,
+  failure = 400,
+  rate_limit = 429,
+}
+
+export enum UserPermission {
+  file,
+  admin,
+}
 
 const Response = z.object({
   status: z.nativeEnum(Status),

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tracks, User } from "../protocol/packets";
+import { User } from "../protocol/packets";
 import { prot } from "../protocol/client";
 
 export default function useGetUser(id: string) {
@@ -7,13 +7,13 @@ export default function useGetUser(id: string) {
 
   useEffect(() => {
     console.log("get");
-    prot.send({ id: id }, Tracks.user).then((answer) => {
-      if (answer.ok) {
+    prot.send("get_user", { user_id: id }).then((answer) => {
+      if (answer.user !== undefined) {
         setUser({
-          id: answer.id,
-          avatar_url: answer.avatar_url,
-          name: answer.name,
-          permissions: answer.permissions,
+          id: answer.user.id,
+          avatar_url: answer.user.avatar_url,
+          name: answer.user.name,
+          permissions: answer.user.permissions,
         });
       }
     });

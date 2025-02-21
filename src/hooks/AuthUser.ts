@@ -51,7 +51,7 @@ export function useAuthUser() {
           prot
             .send("login", { method: "discord", token: code })
             .then((answer) => {
-              if (answer.user_id !== undefined) {
+              if (answer.session_token !== undefined) {
                 session_login(answer.session_token);
               }
             });
