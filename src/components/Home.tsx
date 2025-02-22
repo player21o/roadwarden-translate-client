@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import HomeCard from "./HomeCard";
 import { UserContext } from "../contexts/UserContext";
 import useGetUser from "../hooks/GetUser";
-import { Tracks, UserPermission } from "../protocol/packets";
+import { UserPermission } from "../protocol/packets";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -37,21 +37,10 @@ const Home = () => {
     //console.log("wtf");
 
     prot
-      .send(
-        {
-          start: {
-            year: today.getFullYear(),
-            month: today.getMonth(),
-            day: today.getDate(),
-          },
-          end: {
-            year: that_day.getFullYear(),
-            month: that_day.getMonth(),
-            day: that_day.getDate(),
-          },
-        },
-        Tracks.stats
-      )
+      .send("get_stats", {
+        start: today,
+        end: that_day,
+      })
       .then((an) => console.log(an));
   }, []);
 

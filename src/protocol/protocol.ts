@@ -101,6 +101,13 @@ export class Protocol {
           },
           ws
         );
+      } else {
+        console.log(
+          decoded_packet,
+          tracks[decoded_packet.track_id]["request"].safeParse(
+            decoded_packet.packet
+          ).error!
+        );
       }
     }
   }

@@ -195,8 +195,8 @@ const GetUser = {
 
 const GetStats = {
   request: z.object({
-    start: z.string().pipe(z.coerce.date()),
-    end: z.string().pipe(z.coerce.date()),
+    start: z.coerce.date(),
+    end: z.coerce.date(),
   }),
   response: Response.extend({
     data: z.number().array(),
