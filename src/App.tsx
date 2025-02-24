@@ -7,6 +7,7 @@ import { UserContext } from "./contexts/UserContext";
 import { useState } from "react";
 import Landing from "./components/Landing";
 import ConnectionManager from "./components/ConnectionManager";
+import Editor from "./components/Editor";
 
 /*
 function App() {
@@ -47,6 +48,7 @@ function App() {
               }
             />
             <Route path="/login" element={<Login />} />
+            <Route path="/editor" element={<Editor />} />
           </Routes>
         </BrowserRouter>
       </ConnectionManager>
