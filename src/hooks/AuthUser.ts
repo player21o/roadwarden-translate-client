@@ -11,7 +11,7 @@ export function useAuthUser() {
 
   useEffect(() => {
     const session_login = (session: string) => {
-      lc.set("session", session);
+      lc.set("session", [session]);
 
       prot
         .send("login", { method: "session", token: session })
@@ -53,7 +53,7 @@ export function useAuthUser() {
           }, 1000);
         }
       } else {
-        session_login(session);
+        session_login(session[0]);
       }
     }
   }, []);

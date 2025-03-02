@@ -1,5 +1,7 @@
 type LcSchema = {
-  session: string;
+  session: [string];
+  windows: { dict: boolean; code: boolean; cards: [number][] };
+  drafts: { [card: number]: string };
 };
 
 type Keys = keyof LcSchema;
@@ -11,7 +13,7 @@ export const lc = {
 
     //type ReturnType = ???
     if (data !== null) {
-      return data as LcSchema[T];
+      return JSON.parse(data) as LcSchema[T];
     }
 
     //console.error(`localStorage missing object with key ${key}`);
@@ -19,7 +21,7 @@ export const lc = {
   },
 
   set<T extends Keys>(key: T, value: LcSchema[T]) {
-    window.localStorage.setItem(key, value as any);
+    window.localStorage.setItem(key, JSON.stringify(value) as any);
   },
 
   remove(key: Keys) {

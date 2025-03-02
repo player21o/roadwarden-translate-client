@@ -1,16 +1,18 @@
-import useWindowDimensions from "../hooks/WindowDimensions";
-import EditorWindow from "./EditorWindow";
+import EditorCard from "./EditorCard";
+import FileContext, { default_files } from "../contexts/FileContext";
+import { useState } from "react";
 
 const Editor = () => {
-  const { width, height } = useWindowDimensions();
+  const [files, setFiles] = useState(default_files);
 
   return (
-    <EditorWindow
-      width={width - 200}
-      height={height - 200}
-      x={width / 2}
-      y={height / 2}
-    />
+    <FileContext.Provider value={files}>
+      <EditorCard
+        file="Nigger"
+        card_id={1}
+        get_card={() => ({ id: 1, original: "ss", translation: "ss" })}
+      />
+    </FileContext.Provider>
   );
 };
 

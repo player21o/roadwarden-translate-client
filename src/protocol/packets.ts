@@ -203,9 +203,29 @@ const GetStats = {
   }),
 };
 
+const Card = z.object({
+  id: z.number(),
+  original: z.string(),
+  translation: z.string(),
+  search_original: z.string().array(),
+  search_translation: z.string().array(),
+});
+
+export type Card = z.infer<typeof Card>;
+
+const GetFile = {
+  request: z.object({
+    name: z.string(),
+  }),
+  response: Response.extend({
+    file: z.array(Card).optional(),
+  }),
+};
+
 export const tracks = {
   login: Login,
   get_info: GetInfo,
   get_user: GetUser,
   get_stats: GetStats,
+  get_file: GetFile,
 };
