@@ -28,17 +28,23 @@ const EditorCard = ({ card_id, file, get_card }: Props) => {
       x={width / 2}
       y={height / 2}
     >
-      <div className="h-12">
-        <div className="bg-blue-600 hover:bg-blue-500 text-white w-32 h-12 absolute right-0 cursor-pointer">
-          <h2 className="top-2 relative">Сохранить</h2>
+      <div className="h-14">
+        <div className="bg-blue-600 hover:bg-blue-500 text-white w-32 h-14 absolute right-0 cursor-pointer">
+          <h2 className="top-3 relative">Сохранить</h2>
         </div>
         <h1 className="text-3xl font-bold text-brightpale mt-2">
           {file} <span className="text-gray-400">- карточка #69</span>
         </h1>
       </div>
-      <hr className="" />
+      <hr className="border-chestnut" />
       <div className="mt-12">
-        <Tiptap />
+        <Tiptap
+          width={(width - 800) / 2}
+          height={height - 200 - 400}
+          content={"translation"}
+          className="float-left"
+          editable
+        />
       </div>
     </EditorWindow>
   );

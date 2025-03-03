@@ -21,6 +21,10 @@ a {
   outline: none;
 }
 
+.tiptap:focus {
+  outline: none;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }

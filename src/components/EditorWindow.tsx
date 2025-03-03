@@ -9,7 +9,7 @@ interface Props {
 const EditorWindow = ({ width, height, x, y, children }: Props) => {
   return (
     <div
-      className="absolute border-chestnut border-2 rounded shadow-2xl bg-darkdarkblue flex justify-center"
+      className="absolute border-chestnut border-2 rounded shadow-2xl bg-darkdarkblue flex-col gap-0 flex"
       style={{
         width: width,
         height: height,
