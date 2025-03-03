@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router";
 import logo from "../assets/logo.png";
+import Tiptap from "./Tiptap";
 
 const Landing = () => {
   const redirect = useNavigate();
 
   return (
     <>
+      <Tiptap />
       <img src={logo} alt="" className="scale-75" />
       <h1 className="font-philosopher text-brightpale -mt-5">перевод</h1>
       <button

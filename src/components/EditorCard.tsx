@@ -3,6 +3,7 @@ import useWindowDimensions from "../hooks/WindowDimensions";
 import EditorWindow from "./EditorWindow";
 import FileContext from "../contexts/FileContext";
 import { Card } from "../protocol/packets";
+import Tiptap from "./Tiptap";
 
 interface Props {
   card_id: number;
@@ -36,6 +37,9 @@ const EditorCard = ({ card_id, file, get_card }: Props) => {
         </h1>
       </div>
       <hr className="" />
+      <div className="mt-12">
+        <Tiptap />
+      </div>
     </EditorWindow>
   );
 };
