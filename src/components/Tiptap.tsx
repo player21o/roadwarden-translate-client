@@ -20,12 +20,12 @@ const BubbleMenuButton = ({
   onClick: () => void;
 }) => {
   return (
-    <div
+    <button
       onClick={onClick}
-      className="bg-gray-950 focus:bg-gray-600 w-10 h-10 hover:cursor-pointer hover:bg-gray-900 text-center select-none"
+      className="bg-gray-950 z-50 focus:bg-gray-800 w-10 h-10 hover:cursor-pointer hover:bg-gray-900 text-center select-none"
     >
-      <p className="material-icons mt-[25%]">{icon}</p>
-    </div>
+      <p className="material-icons align-middle focus:translate-y-1">{icon}</p>
+    </button>
   );
 };
 
@@ -51,9 +51,14 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
       {editor && (
         <BubbleMenu
           editor={editor}
-          tippyOptions={{ appendTo: document.body, duration: 100, delay: 0 }}
+          tippyOptions={{
+            //appendTo: document.body,
+            duration: 100,
+            delay: 0,
+            //interactive: true,
+          }}
         >
-          <div className="rounded flex flex-row">
+          <div className="flex flex-row first:rounded-l-2xl last:rounded-r-2xl">
             <BubbleMenuButton
               onClick={() => editor.chain().focus().toggleItalic().run()}
               icon="format_italic"
