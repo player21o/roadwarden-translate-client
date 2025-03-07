@@ -5,7 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 const extensions = [StarterKit];
 
 interface Props {
-  editable?: boolean;
+  editable: boolean;
   content: string;
   className: string;
   width: number;
