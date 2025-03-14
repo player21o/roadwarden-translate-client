@@ -1,48 +1,41 @@
-import { useContext, useEffect, useState } from "react";
 import useWindowDimensions from "../hooks/WindowDimensions";
 import EditorWindow from "./EditorWindow";
-import FileContext from "../contexts/FileContext";
-import { Card } from "../protocol/packets";
 import Tiptap from "./Tiptap";
+import { File } from "../contexts/FetchFile";
+import { useHotkeys } from "react-hotkeys-hook";
+import { useEffect, useState } from "react";
+import { Card } from "../protocol/packets";
 
 interface Props {
-  index: number;
-  file: string;
-  fetch_file: (arg0: string) => void;
+  start_index: number;
+  file: File | null;
 }
 
-const EditorCard = ({ index, file, fetch_file }: Props) => {
-  const { files, ids } = useContext(FileContext);
-  const [card, setCard] = useState<Card | null>(null);
-  const [card_index, setCardIndex] = useState(index);
-
+const EditorCard = ({ start_index, file }: Props) => {
   const { width, height } = useWindowDimensions();
+  const [index, setIndex] = useState(start_index);
+  const [card, setCard] = useState<Card | null>(null);
 
   const [window_width, window_height] = [width - 800, height - 200];
 
-  const load_card = (c_index: number) => {
-    if (c_index + 1 <= files[file].length && c_index >= 0) {
-      setCard(files[file][c_index]);
-    }
-  };
-
-  const go_to_card = (c_index: number, relative?: boolean) => {
-    const ind =
-      relative != undefined && relative == true
-        ? card_index + c_index
-        : c_index;
-
-    if (ind >= 0 && ind < files[file].length - 1) {
-      setCardIndex(ind);
-      load_card(ind);
-    }
-  };
+  useHotkeys("ctrl+arrowdown", () => go_to_card(1, true));
+  useHotkeys("ctrl+arrowup", () => go_to_card(-1, true));
 
   useEffect(() => {
-    console.log(files);
-    fetch_file(file);
-    go_to_card(index);
-  }, []);
+    if (file != undefined) setCard(file!.visible_cards[index]);
+  }, [file]);
+
+  const go_to_card = (ind: number, relative?: boolean) => {
+    if (file != null) {
+      const new_ind =
+        relative != undefined && relative == true ? index + ind : ind;
+
+      if (new_ind >= 0 && new_ind <= file.visible_cards.length - 1) {
+        setIndex(new_ind);
+        setCard(file.visible_cards[index]);
+      }
+    }
+  };
 
   return (
     <EditorWindow
@@ -51,14 +44,15 @@ const EditorCard = ({ index, file, fetch_file }: Props) => {
       x={width / 2}
       y={height / 2}
     >
-      {card && (
+      {file && card && (
         <>
           <div className="h-14">
             <div className="bg-blue-600 hover:bg-blue-500 text-white w-32 h-14 absolute right-0 cursor-pointer">
               <h2 className="top-3 relative">Сохранить</h2>
             </div>
             <h1 className="text-3xl font-bold text-brightpale mt-2">
-              {file} <span className="text-gray-400">- карточка #69</span>
+              {file.name}{" "}
+              <span className="text-gray-400">- карточка #{index + 1}</span>
             </h1>
           </div>
           <hr className="border-chestnut" />

@@ -209,6 +209,9 @@ const Card = z.object({
   translation: z.string(),
   search_original: z.string().array(),
   search_translation: z.string().array(),
+  hidden: z.boolean(),
+  line_start: z.number(),
+  line_end: z.number(),
 });
 
 export type Card = z.infer<typeof Card>;
