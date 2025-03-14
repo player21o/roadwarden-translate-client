@@ -22,8 +22,12 @@ const EditorCard = ({ start_index, file }: Props) => {
   useHotkeys("ctrl+arrowup", () => go_to_card(-1, true));
 
   useEffect(() => {
-    if (file != undefined) setCard(file!.visible_cards[index]);
+    if (file != undefined) setCard(file.visible_cards[index]);
   }, [file]);
+
+  useEffect(() => {
+    if (file != undefined) setCard(file.visible_cards[index]);
+  }, [index]);
 
   const go_to_card = (ind: number, relative?: boolean) => {
     if (file != null) {
@@ -32,7 +36,6 @@ const EditorCard = ({ start_index, file }: Props) => {
 
       if (new_ind >= 0 && new_ind <= file.visible_cards.length - 1) {
         setIndex(new_ind);
-        setCard(file.visible_cards[index]);
       }
     }
   };

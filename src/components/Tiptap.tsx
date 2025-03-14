@@ -30,24 +30,17 @@ const BubbleMenuButton = ({
 };
 
 const Tiptap = ({ editable, content, className, width, height }: Props) => {
-  const editor = useEditor({
-    extensions,
-    content,
-    editable,
-  });
+  const editor = useEditor(
+    {
+      extensions,
+      content,
+      editable,
+    },
+    [content]
+  );
 
   return (
-    <>
-      <EditorContent
-        key={"editor"}
-        editor={editor}
-        //contentEditable
-        style={{ width, height }}
-        className={
-          "text-left font-philosopher text-2xl relative leading-none border-chestnut border-2 rounded overflow-x-auto p-2 " +
-          className
-        }
-      />
+    <div>
       {editor && (
         <BubbleMenu
           editor={editor}
@@ -70,7 +63,17 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
           </div>
         </BubbleMenu>
       )}
-    </>
+      <EditorContent
+        //key={"editor"}
+        editor={editor}
+        //contentEditable
+        style={{ width, height }}
+        className={
+          "text-left font-philosopher text-2xl relative leading-none border-chestnut border-2 rounded overflow-x-auto p-2 " +
+          className
+        }
+      />
+    </div>
   );
 };
 
