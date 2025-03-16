@@ -1,8 +1,6 @@
 import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-
-// define your extension array
-const extensions = [StarterKit];
+import { GenderNode } from "../utils/gender_node";
 
 interface Props {
   editable: boolean;
@@ -32,8 +30,9 @@ const BubbleMenuButton = ({
 const Tiptap = ({ editable, content, className, width, height }: Props) => {
   const editor = useEditor(
     {
-      extensions,
-      content,
+      extensions: [StarterKit, GenderNode],
+      //content,
+      content: '<gender male="male" female="female">asdasd</gender>',
       editable,
     },
     [content]
@@ -69,7 +68,7 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
         //contentEditable
         style={{ width, height }}
         className={
-          "text-left font-philosopher text-2xl relative leading-none border-chestnut border-2 rounded overflow-x-auto p-2 " +
+          "text-left font-philosopher text-pale text-2xl relative leading-none border-chestnut border-2 rounded overflow-x-auto p-2 " +
           className
         }
       />
