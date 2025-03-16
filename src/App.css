@@ -24,6 +24,10 @@
     rotate 1.6s linear infinite;
 }
 
+.node-gender::after {
+  content: "\200B";
+}
+
 @-webkit-keyframes rotate {
   from {
     -webkit-transform: rotate(0);

@@ -1,4 +1,4 @@
-import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import { GenderNodeAttributes } from "../utils/gender_node";
 
 const GenderNodeComponent = ({ node: { attrs } }: NodeViewProps) => {
@@ -6,12 +6,15 @@ const GenderNodeComponent = ({ node: { attrs } }: NodeViewProps) => {
 
   return (
     <NodeViewWrapper>
-      <p>
-        <span style={{}} className="bg-blue-400">
+      <p contentEditable={false}>
+        <span style={{}} className="bg-blue-500 bg-opacity-45">
           {male}
         </span>{" "}
-        {female}
+        <span style={{}} className="bg-pink-500 bg-opacity-45">
+          {female}
+        </span>
       </p>
+      <NodeViewContent />
     </NodeViewWrapper>
   );
 };

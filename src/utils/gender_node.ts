@@ -12,6 +12,10 @@ export const GenderNode = Node.create<{
   name: "gender",
   inline: true,
   group: "inline",
+  atom: true,
+  selectable: true,
+  draggable: false,
+  content: "inline*",
 
   addNodeView() {
     return ReactNodeViewRenderer(GenderNodeComponent);
