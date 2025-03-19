@@ -1,11 +1,8 @@
-import {
-  BubbleMenu,
-  useEditor,
-  EditorContent,
-  FloatingMenu,
-} from "@tiptap/react";
+import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Gender } from "../utils/gender_node";
+import { convert_tags_to_html } from "../utils/schema_converter";
+import { useEffect } from "react";
 
 interface Props {
   editable: boolean;
@@ -37,12 +34,17 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
     {
       extensions: [StarterKit, Gender],
       //content,
-      content:
-        '<p><gender type="male">amle</gender>|<gender type="female">female</gender></p>',
+      //content:
+      //  '<p><gender type="male">amle</gender>|<gender type="female">female</gender></p>',
+      content: convert_tags_to_html(content),
       editable,
     },
     [content]
   );
+
+  useEffect(() => {
+    console.log(convert_tags_to_html(content), content);
+  }, [content]);
 
   return (
     <div>
@@ -71,24 +73,6 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
             />
           </div>
         </BubbleMenu>
-      )}
-      {editor && (
-        <FloatingMenu
-          editor={editor}
-          tippyOptions={{
-            //appendTo: document.body,
-            duration: 100,
-            delay: 0,
-            //interactive: true,
-          }}
-        >
-          <div className="flex flex-row first:rounded-l-2xl last:rounded-r-2xl">
-            <BubbleMenuButton
-              onClick={() => editor.chain().focus().appendGender().run()}
-              icon="transgender"
-            />
-          </div>
-        </FloatingMenu>
       )}
       <EditorContent
         //key={"editor"}
