@@ -3,6 +3,8 @@ import StarterKit from "@tiptap/starter-kit";
 import { Gender } from "../utils/gender_node";
 import { convert_tags_to_html } from "../utils/schema_converter";
 import { useEffect } from "react";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
 
 interface Props {
   editable: boolean;
@@ -32,7 +34,7 @@ const BubbleMenuButton = ({
 const Tiptap = ({ editable, content, className, width, height }: Props) => {
   const editor = useEditor(
     {
-      extensions: [StarterKit, Gender],
+      extensions: [StarterKit, Gender, TextStyle, Color],
       //content,
       //content:
       //  '<p><gender type="male">amle</gender>|<gender type="female">female</gender></p>',
@@ -41,10 +43,6 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
     },
     [content]
   );
-
-  useEffect(() => {
-    console.log(convert_tags_to_html(content), content);
-  }, [content]);
 
   return (
     <div>
@@ -80,7 +78,7 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
         //contentEditable
         style={{ width, height }}
         className={
-          "text-left font-philosopher text-pale text-2xl relative leading-none border-chestnut border-2 rounded overflow-x-auto p-2 " +
+          "text-left font-philosopher text-pale text-2xl relative leading-7 border-chestnut border-2 rounded overflow-x-auto p-2 " +
           className
         }
       />

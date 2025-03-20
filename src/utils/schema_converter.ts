@@ -1,12 +1,26 @@
 export function convert_tags_to_html(data: string) {
   const matches = [...data.matchAll(/{color=/g)];
 
+  const to_append = '<span style="color: ';
+  let offset = 0;
+
   matches.forEach((match) => {
-    //match.
+    const index = match.index + offset;
+
+    data = [
+      data.substring(0, index),
+      to_append,
+      data.substring(index + "{color=".length, index + "{color=".length + 7),
+      ';">',
+      data.substring(index + "{color=".length + 6 + 2, data.length + offset),
+    ].join("");
+
+    offset += to_append.length - "{color=".length + ';">'.length - 1;
   });
 
   return (
     data
+      .replace(/{\/color}/g, "</span>")
       .replace(/{g}/g, '<gender type="male">')
       .replace(/\|/g, '</gender>|<gender type="female">')
       .replace(/{\/g}/g, "</gender>")

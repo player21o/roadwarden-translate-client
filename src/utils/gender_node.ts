@@ -1,47 +1,8 @@
-import {
-  mergeAttributes,
-  Node,
-  ReactNodeViewRenderer,
-  Mark,
-} from "@tiptap/react";
-import GenderNodeComponent from "../components/GenderNodeComponent";
+import { mergeAttributes, Mark } from "@tiptap/react";
 
 export interface GenderNodeAttributes {
   type: "male" | "female";
 }
-
-/*
-export const GenderNode = Node.create<{
-  attributes: GenderNodeAttributes;
-}>({
-  name: "gender",
-  inline: true,
-  group: "inline",
-  //atom: true,
-  selectable: true,
-  draggable: false,
-  content: "text*",
-  marks: "",
-
-  addNodeView() {
-    return ReactNodeViewRenderer(GenderNodeComponent);
-  },
-
-  addAttributes() {
-    return {
-      type: { default: "male" },
-    };
-  },
-
-  parseHTML() {
-    return [{ tag: "gender" }];
-  },
-
-  renderHTML({ HTMLAttributes }) {
-    return ["gender", mergeAttributes(HTMLAttributes)];
-  },
-});
-*/
 
 export const Gender = Mark.create<GenderNodeAttributes>({
   name: "gender",

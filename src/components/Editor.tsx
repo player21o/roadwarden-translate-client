@@ -6,7 +6,10 @@ const Editor = () => {
   const [files, setFiles] = useState<Files>({});
 
   return (
-    <EditorCard start_index={0} file={useFetchFile("beach", files, setFiles)} />
+    <EditorCard
+      start_index={0}
+      file={useFetchFile("prologue", files, setFiles)}
+    />
   );
 };
 
