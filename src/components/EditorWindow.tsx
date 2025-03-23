@@ -4,6 +4,7 @@ interface Props {
   x: number;
   y: number;
   children: React.ReactNode;
+  resizable?: boolean;
 }
 
 const EditorWindow = ({ width, height, x, y, children }: Props) => {

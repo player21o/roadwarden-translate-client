@@ -1,6 +1,13 @@
+export type Windows = {
+  dict: boolean;
+  code: boolean;
+  cards: { file: string; index: number }[];
+  active: number;
+};
+
 type LcSchema = {
   session: [string];
-  windows: { dict: boolean; code: boolean; cards: [number][] };
+  windows: Windows;
   drafts: { [card: number]: string };
 };
 

@@ -2,7 +2,6 @@ import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Gender } from "../utils/gender_node";
 import { convert_tags_to_html } from "../utils/schema_converter";
-import { useEffect } from "react";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 
@@ -66,7 +65,8 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
               icon="format_bold"
             />
             <BubbleMenuButton
-              onClick={() => editor.chain().focus().appendGender().run()}
+              //onClick={() => editor.chain().focus().appendGender().run()}
+              onClick={() => {}}
               icon="transgender"
             />
           </div>

@@ -1,23 +1,23 @@
 import useWindowDimensions from "../hooks/WindowDimensions";
 import EditorWindow from "./EditorWindow";
 import Tiptap from "./Tiptap";
-import { File } from "../contexts/FetchFile";
-import { useHotkeys } from "react-hotkeys-hook";
-import { useEffect, useState } from "react";
-import { Card } from "../protocol/packets";
+import { File } from "../hooks/FetchFile";
 
 interface Props {
-  start_index: number;
+  index: number;
   file: File | null;
 }
 
-const EditorCard = ({ start_index, file }: Props) => {
+const EditorCard = ({ index, file }: Props) => {
   const { width, height } = useWindowDimensions();
+  /*
   const [index, setIndex] = useState(start_index);
   const [card, setCard] = useState<Card | null>(null);
+  */
 
   const [window_width, window_height] = [width - 800, height - 200];
 
+  /*
   useHotkeys("ctrl+arrowdown", () => go_to_card(1, true));
   useHotkeys("ctrl+arrowup", () => go_to_card(-1, true));
 
@@ -39,6 +39,7 @@ const EditorCard = ({ start_index, file }: Props) => {
       }
     }
   };
+  */
 
   return (
     <EditorWindow
@@ -47,7 +48,7 @@ const EditorCard = ({ start_index, file }: Props) => {
       x={width / 2}
       y={height / 2}
     >
-      {file && card && (
+      {file && (
         <>
           <div className="h-14">
             <div className="bg-blue-600 hover:bg-blue-500 text-white w-32 h-14 absolute right-0 cursor-pointer">
@@ -63,14 +64,14 @@ const EditorCard = ({ start_index, file }: Props) => {
             <Tiptap
               width={window_width / 2 - 16 - 10}
               height={window_height - 130}
-              content={card.original}
+              content={file.cards[index].original}
               className="float-left ml-4"
               editable={false}
             />
             <Tiptap
               width={window_width / 2 - 16 - 10}
               height={window_height - 130}
-              content={card.translation}
+              content={file.cards[index].translation}
               className="float-right mr-4"
               editable
             />

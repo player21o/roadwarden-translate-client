@@ -35,8 +35,10 @@ const useFetchFile = (
 
           setFile(return_file);
 
+          console.log(name);
+
           if (setCache != undefined && cache != undefined)
-            setCache({ ...cache, name: return_file });
+            setCache({ ...cache, [name]: return_file });
         }
       });
     }

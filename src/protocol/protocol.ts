@@ -15,9 +15,9 @@ export class Protocol {
   private resolves: { [key: number]: (packet: any) => void } = {};
 
   private event_emitter = new EventEmitter();
-  private event_emitter_rate_limits: {
-    [key in keyof typeof tracks]?: { interval: number; last_packet: number };
-  } = {};
+  //private event_emitter_rate_limits: {
+  //  [key in keyof typeof tracks]?: { interval: number; last_packet: number };
+  //} = {};
 
   private send_full_packet(full_packet: FullPacket, ws: WsType) {
     return new Promise<(typeof full_packet)["packet"]["response"]>(
@@ -120,8 +120,8 @@ export class Protocol {
         answer: (arg0: z.infer<(typeof tracks)[T]["response"]>) => Promise<any>;
       },
       ws: WsType
-    ) => any,
-    rate_limit = 0
+    ) => any
+    //rate_limit = 0
   ) {
     /*
     this.event_emitter_rate_limits[track_num] = {
