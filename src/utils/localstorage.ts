@@ -5,13 +5,19 @@ export type Windows = {
   active: number;
 };
 
+export type Drafts = { [card: number]: string };
+
 type LcSchema = {
   session: [string];
   windows: Windows;
-  drafts: { [card: number]: string };
+  drafts: Drafts;
 };
 
 type Keys = keyof LcSchema;
+
+export function get_or_default<T extends Keys>(key: T, value: LcSchema[T]) {
+  return lc.get(key) != null ? lc.get(key)! : value;
+}
 
 export const lc = {
   get<T extends Keys>(key: T): LcSchema[T] | null {

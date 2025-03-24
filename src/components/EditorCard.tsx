@@ -2,13 +2,18 @@ import useWindowDimensions from "../hooks/WindowDimensions";
 import EditorWindow from "./EditorWindow";
 import Tiptap from "./Tiptap";
 import { File } from "../hooks/FetchFile";
+import { Card } from "../protocol/packets";
+import { Drafts } from "../utils/localstorage";
+import { useMemo } from "react";
 
 interface Props {
   index: number;
   file: File | null;
+  drafts: Drafts;
+  onChange?: (arg0: Card, arg1: string) => void;
 }
 
-const EditorCard = ({ index, file }: Props) => {
+const EditorCard = ({ index, file, onChange, drafts }: Props) => {
   const { width, height } = useWindowDimensions();
   /*
   const [index, setIndex] = useState(start_index);
@@ -41,6 +46,14 @@ const EditorCard = ({ index, file }: Props) => {
   };
   */
 
+  const translation = useMemo<string | undefined>(() => {
+    if (file != null) {
+      return file.cards[index].id.toString() in drafts
+        ? drafts[file.cards[index].id]
+        : file.cards[index].translation;
+    }
+  }, [index, file]);
+
   return (
     <EditorWindow
       width={window_width}
@@ -48,12 +61,15 @@ const EditorCard = ({ index, file }: Props) => {
       x={width / 2}
       y={height / 2}
     >
-      {file && (
+      {file && translation != undefined && (
         <>
           <div className="h-14">
-            <div className="bg-blue-600 hover:bg-blue-500 text-white w-32 h-14 absolute right-0 cursor-pointer">
-              <h2 className="top-3 relative">Сохранить</h2>
-            </div>
+            <button
+              disabled={!(file.cards[index].id in drafts)}
+              className="bg-blue-600 hover:bg-blue-500 text-white disabled:bg-gray-600 w-32 h-14 absolute right-0 enabled:cursor-pointer"
+            >
+              <h2 className="relative">Сохранить</h2>
+            </button>
             <h1 className="text-3xl font-bold text-brightpale mt-2">
               {file.name}{" "}
               <span className="text-gray-400">- карточка #{index + 1}</span>
@@ -71,8 +87,11 @@ const EditorCard = ({ index, file }: Props) => {
             <Tiptap
               width={window_width / 2 - 16 - 10}
               height={window_height - 130}
-              content={file.cards[index].translation}
+              content={translation}
               className="float-right mr-4"
+              onUpdate={(content) => {
+                if (onChange != undefined) onChange(file.cards[index], content);
+              }}
               editable
             />
           </div>

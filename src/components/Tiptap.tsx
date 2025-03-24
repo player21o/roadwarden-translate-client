@@ -11,6 +11,7 @@ interface Props {
   className: string;
   width: number;
   height: number;
+  onUpdate?: (arg0: string) => void;
 }
 
 const BubbleMenuButton = ({
@@ -30,7 +31,14 @@ const BubbleMenuButton = ({
   );
 };
 
-const Tiptap = ({ editable, content, className, width, height }: Props) => {
+const Tiptap = ({
+  editable,
+  content,
+  className,
+  width,
+  height,
+  onUpdate,
+}: Props) => {
   const editor = useEditor(
     {
       extensions: [StarterKit, Gender, TextStyle, Color],
@@ -39,6 +47,9 @@ const Tiptap = ({ editable, content, className, width, height }: Props) => {
       //  '<p><gender type="male">amle</gender>|<gender type="female">female</gender></p>',
       content: convert_tags_to_html(content),
       editable,
+      onUpdate: ({ editor }) => {
+        if (onUpdate != undefined) onUpdate(editor.getHTML());
+      },
     },
     [content]
   );

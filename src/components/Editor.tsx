@@ -1,25 +1,31 @@
 import EditorCard from "./EditorCard";
 import { useState } from "react";
 import useFetchFile, { Files } from "../hooks/FetchFile";
-import { lc, Windows } from "../utils/localstorage";
+import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
 import { useHotkeys } from "react-hotkeys-hook";
 
 const Editor = () => {
   const [files, setFiles] = useState<Files>({});
-  const [windows, setWindowsState] = useState<Windows>(
-    lc.get("windows") != null
-      ? lc.get("windows")!
-      : {
-          dict: false,
-          code: false,
-          cards: [{ file: "beach", index: 0 }],
-          active: 0,
-        }
+
+  const [windows, setWindowsState] = useState(
+    get_or_default("windows", {
+      dict: false,
+      code: false,
+      cards: [{ file: "beach", index: 0 }],
+      active: 0,
+    })
   );
+
+  const [drafts, setDraftsState] = useState(get_or_default("drafts", {}));
 
   const setWindows = (data: Windows) => {
     setWindowsState(data);
     lc.set("windows", data);
+  };
+
+  const setDrafts = (data: Drafts) => {
+    setDraftsState(data);
+    lc.set("drafts", data);
   };
 
   const go_to_card = (
@@ -85,6 +91,8 @@ const Editor = () => {
     <EditorCard
       index={windows.cards[windows.active].index}
       file={useFetchFile(windows.cards[windows.active].file, files, setFiles)}
+      drafts={drafts}
+      onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
     />
   );
 };
