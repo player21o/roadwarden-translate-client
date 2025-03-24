@@ -15,6 +15,8 @@ export default {
       },
       fontFamily: {
         philosopher: "Philosopher",
+        spacedots: "SpaceDots",
+        editor: ["Philosopher", "SpaceDots"],
       },
     },
   },

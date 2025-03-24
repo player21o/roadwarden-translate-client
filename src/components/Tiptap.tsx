@@ -89,7 +89,7 @@ const Tiptap = ({
         //contentEditable
         style={{ width, height }}
         className={
-          "text-left font-philosopher text-pale text-2xl relative leading-7 border-chestnut border-2 rounded overflow-x-auto p-2 " +
+          "text-left font-editor text-pale text-2xl relative leading-7 border-chestnut border-2 rounded overflow-x-auto p-2 " +
           className
         }
       />

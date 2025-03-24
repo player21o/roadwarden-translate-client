@@ -112,3 +112,9 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+@font-face {
+  font-family: "SpaceDots";
+  src: url("./assets/SpaceDots.woff2") format("woff2");
+  unicode-range: U+0020;
+}
