@@ -36,9 +36,10 @@ export function convert_tags_to_html(data: string) {
 
 export function convert_html_to_tags(data: string) {
   return data
-    .replace(/<gender type="male">/g, "{g}")
-    .replace(/<gender type="female">/g, "")
+    .replace(/<gender [^<]* type="male">/g, "{g}")
+    .replace(/<gender [^<]* type="female">/g, "")
     .replace(/<\/gender>(?!\|)/g, "{/g}")
+    .replace(/<\/gender>\|/g, "|")
     .replace(/<i>/g, "{i}")
     .replace(/<\/i>/g, "{/i}")
     .replace(/<b>/g, "{b}")

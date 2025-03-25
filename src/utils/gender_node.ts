@@ -20,7 +20,7 @@ export const Gender = Mark.create<GenderNodeAttributes>({
 
   renderHTML({ HTMLAttributes }) {
     return [
-      "span",
+      "gender",
       mergeAttributes(
         {
           class: `bg-opacity-45 ${
@@ -29,6 +29,7 @@ export const Gender = Mark.create<GenderNodeAttributes>({
         },
         HTMLAttributes
       ),
+      0,
     ];
   },
 
