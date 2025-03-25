@@ -38,5 +38,13 @@ export function convert_html_to_tags(data: string) {
   return data
     .replace(/<gender type="male">/g, "{g}")
     .replace(/<gender type="female">/g, "")
-    .replace(/<\/gender>(?!\|)/g, "{/g}");
+    .replace(/<\/gender>(?!\|)/g, "{/g}")
+    .replace(/<i>/g, "{i}")
+    .replace(/<\/i>/g, "{/i}")
+    .replace(/<b>/g, "{b}")
+    .replace(/<\/b>/g, "{/b}")
+    .replace(/<\/p><p>/gm, "\n")
+    .replace(/<\/span>/g, "{/color}")
+    .replace(/<\/p>/, "")
+    .replace(/<p>/, "");
 }

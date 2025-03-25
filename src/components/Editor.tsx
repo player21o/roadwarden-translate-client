@@ -11,7 +11,7 @@ const Editor = () => {
     get_or_default("windows", {
       dict: false,
       code: false,
-      cards: [{ file: "beach", index: 0 }],
+      cards: [{ file: "prologue", index: 0 }],
       active: 0,
     })
   );
@@ -37,7 +37,7 @@ const Editor = () => {
 
     if (window != undefined) {
       const file = files[window.file];
-      console.log(files, window.file);
+      //console.log(files, window.file);
 
       if (file != null) {
         const new_ind =
@@ -93,6 +93,7 @@ const Editor = () => {
       file={useFetchFile(windows.cards[windows.active].file, files, setFiles)}
       drafts={drafts}
       onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
+      onCommit={(_, content) => console.log(content)}
     />
   );
 };

@@ -5,15 +5,17 @@ import { File } from "../hooks/FetchFile";
 import { Card } from "../protocol/packets";
 import { Drafts } from "../utils/localstorage";
 import { useMemo } from "react";
+import { convert_html_to_tags } from "../utils/schema_converter";
 
 interface Props {
   index: number;
   file: File | null;
   drafts: Drafts;
   onChange?: (arg0: Card, arg1: string) => void;
+  onCommit?: (arg0: Card, arg1: string) => void;
 }
 
-const EditorCard = ({ index, file, onChange, drafts }: Props) => {
+const EditorCard = ({ index, file, onChange, onCommit, drafts }: Props) => {
   const { width, height } = useWindowDimensions();
   /*
   const [index, setIndex] = useState(start_index);
@@ -65,6 +67,13 @@ const EditorCard = ({ index, file, onChange, drafts }: Props) => {
         <>
           <div className="h-14">
             <button
+              onClick={() => {
+                if (onCommit != undefined)
+                  onCommit(
+                    file.cards[index],
+                    convert_html_to_tags(drafts[file.cards[index].id])
+                  );
+              }}
               disabled={!(file.cards[index].id in drafts)}
               className="bg-blue-600 hover:bg-blue-500 text-white disabled:bg-gray-600 w-32 h-14 absolute right-0 enabled:cursor-pointer"
             >
