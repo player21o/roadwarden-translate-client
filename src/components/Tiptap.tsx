@@ -1,9 +1,10 @@
 import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Gender } from "../utils/gender_node";
+import { Gender } from "../nodes/gender_mark";
 import { convert_tags_to_html } from "../utils/schema_converter";
 import TextStyle from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
+import { Color } from "../nodes/color_mark";
+//import Color from "@tiptap/extension-color";
 
 interface Props {
   editable: boolean;
@@ -46,6 +47,7 @@ const Tiptap = ({
       //content:
       //  '<p><gender type="male">amle</gender>|<gender type="female">female</gender></p>',
       content: convert_tags_to_html(content),
+      //content: '<p><color color="#000000">Nigger</color></p>',
       editable,
       onUpdate: ({ editor }) => {
         if (onUpdate != undefined) onUpdate(editor.getHTML());
