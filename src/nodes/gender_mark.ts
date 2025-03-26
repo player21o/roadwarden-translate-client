@@ -6,7 +6,7 @@ export interface GenderNodeAttributes {
 
 export const Gender = Mark.create<GenderNodeAttributes>({
   name: "gender",
-  marks: "_",
+  //marks: "_",
 
   addAttributes() {
     return {

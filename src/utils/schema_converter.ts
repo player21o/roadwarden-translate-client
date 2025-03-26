@@ -1,4 +1,6 @@
 export function convert_tags_to_html(data: string) {
+  data = data.replace(/ /g, "<space> </space>");
+
   const matches = [...data.matchAll(/{color=/g)];
 
   const to_append = '<color color="';
@@ -21,12 +23,16 @@ export function convert_tags_to_html(data: string) {
   return (
     data
       .replace(/{\/color}/g, "</color>")
+
       .replace(/{g}/g, '<gender type="male">')
       .replace(/\|/g, '</gender>|<gender type="female">')
       .replace(/{\/g}/g, "</gender>")
+
       .replace(/\n/gm, "</p><p>")
+
       .replace(/{b}/g, "<b>")
       .replace(/{\/b}/g, "</b>")
+
       .replace(/{i}/g, "<i>")
       .replace(/{\/i}/g, "</i>") +
     //.substring(4)
@@ -81,5 +87,7 @@ export function convert_html_to_tags(data: string) {
 
     .replace(/<\/p><p>/gm, "\n")
     .replace(/<\/p>/, "")
-    .replace(/<p>/, "");
+    .replace(/<p>/, "")
+
+    .replace(/<space>[^<]*<\/space>/g, " ");
 }

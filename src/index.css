@@ -118,3 +118,10 @@ button:focus-visible {
   src: url("./assets/SpaceDots.woff2") format("woff2");
   unicode-range: U+0020;
 }
+
+space {
+  background: white;
+  white-space: break-spaces;
+  background-image: url("./assets/circle.svg");
+  background-color: rgba(255, 255, 255, 0);
+}

@@ -52,7 +52,7 @@ const EditorCard = ({ index, file, onChange, onCommit, drafts }: Props) => {
     if (file != null) {
       return file.cards[index].id.toString() in drafts
         ? drafts[file.cards[index].id]
-        : file.cards[index].translation;
+        : convert_html_to_tags(file.cards[index].translation);
     }
   }, [index, file]);
 
