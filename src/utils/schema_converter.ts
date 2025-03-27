@@ -1,5 +1,5 @@
 export function convert_tags_to_html(data: string) {
-  console.log(data.replace(/\n/gm, "</p><p>"));
+  //console.log(data.replace(/\n/gm, "</p><p>"));
 
   data = data.replace(/ /g, "<space> </space>");
 
@@ -25,6 +25,9 @@ export function convert_tags_to_html(data: string) {
   return (
     "<p>" +
     data
+      .replace(/\[/g, "<var>")
+      .replace(/\]/g, "</var>")
+
       .replace(/{\/color}/g, "</color>")
 
       .replace(/{g}/g, '<gender type="male">')
@@ -91,8 +94,11 @@ export function convert_html_to_tags(data: string) {
     .replace(/<\/color>/g, "{/color}")
 
     .replace(/<\/p><p>/gm, "\n")
-    .replace(/<\/p>/, "")
-    .replace(/<p>/, "")
+    .replace(/<\/p>/g, "")
+    .replace(/<p>/g, "")
+
+    .replace(/<var>/g, "[")
+    .replace(/<\/var>/g, "]")
 
     .slice(0, -1); //to delete trailing \n
 }

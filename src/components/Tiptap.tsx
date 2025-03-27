@@ -59,8 +59,8 @@ const Tiptap = ({
       ],
       //content,
       //content:
-      content: "<p><var>you stupid nigger</var> ssaasd </p>",
-      //content: content,
+      //content: "<p><var>you stupid nigger</var> ssaasd </p>",
+      content: content,
       //content: "<p><space>&nbsp;</space></p>",
       editable,
       onUpdate: ({ editor }) => {
