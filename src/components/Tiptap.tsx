@@ -7,6 +7,7 @@ import Italic from "@tiptap/extension-italic";
 import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
+import { VariableNode } from "../nodes/variable_node";
 //import Color from "@tiptap/extension-color";
 
 interface Props {
@@ -54,11 +55,12 @@ const Tiptap = ({
         Gender,
         Color,
         Space,
+        VariableNode,
       ],
       //content,
       //content:
-      //  '<p><gender type="male">amle</gender>|<gender type="female">female</gender></p>',
-      content: content,
+      content: "<p><var>you stupid nigger</var> ssaasd </p>",
+      //content: content,
       //content: "<p><space>&nbsp;</space></p>",
       editable,
       onUpdate: ({ editor }) => {
