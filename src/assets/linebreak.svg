@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:export>
+      <bx:file format="svg" href="#object-0" path="linebreak.svg"/>
+    </bx:export>
+  </defs>
+  <path d="M 279.47 368.506 L 279.47 302.35 C 279.47 288.567 274.647 276.853 264.998 267.203 C 255.353 257.558 243.639 252.736 229.855 252.736 L 78.113 252.736 L 137.653 312.272 L 114.085 335.428 L 14.855 236.195 L 114.085 136.969 L 137.653 160.122 L 78.113 219.658 L 229.855 219.658 C 252.736 219.658 272.238 227.718 288.359 243.847 C 304.487 259.972 312.548 279.474 312.548 302.35 L 312.548 368.506 L 279.47 368.506 Z" id="object-0" style="transform-box: fill-box; transform-origin: 50% 50%; fill: rgba(255, 255, 255, 0.267);" transform="matrix(-1, 0, 0, -1, 0.000009, 0.000015)"/>
+</svg>

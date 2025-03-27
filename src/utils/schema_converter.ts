@@ -1,4 +1,6 @@
 export function convert_tags_to_html(data: string) {
+  console.log(data.replace(/\n/gm, "</p><p>"));
+
   data = data.replace(/ /g, "<space> </space>");
 
   const matches = [...data.matchAll(/{color=/g)];
@@ -21,6 +23,7 @@ export function convert_tags_to_html(data: string) {
   });
 
   return (
+    "<p>" +
     data
       .replace(/{\/color}/g, "</color>")
 
@@ -41,6 +44,8 @@ export function convert_tags_to_html(data: string) {
 }
 
 export function convert_html_to_tags(data: string) {
+  data = data.replace(/<space>[^<]*<\/space>/g, " ");
+
   const matches = [...data.matchAll(/<color style="color: /g)];
 
   const to_append = "{color=";
@@ -58,13 +63,13 @@ export function convert_html_to_tags(data: string) {
       ),
       "}",
       data.substring(
-        index + '<color style="color: '.length + 6 + 2,
-        data.length + offset
+        index + '<color style="color: '.length + 6 + 3,
+        data.length
       ),
     ].join("");
 
     offset +=
-      to_append.length - '<color style="color: '.length + "}".length - 1;
+      to_append.length - '<color style="color: '.length + "}".length - 2;
   });
 
   return data
@@ -89,5 +94,5 @@ export function convert_html_to_tags(data: string) {
     .replace(/<\/p>/, "")
     .replace(/<p>/, "")
 
-    .replace(/<space>[^<]*<\/space>/g, " ");
+    .slice(0, -1); //to delete trailing \n
 }

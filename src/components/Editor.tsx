@@ -93,7 +93,7 @@ const Editor = () => {
       file={useFetchFile(windows.cards[windows.active].file, files, setFiles)}
       drafts={drafts}
       onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
-      onCommit={(_, content) => console.log(content)}
+      onCommit={(_, content) => console.log(content.replace(/\n/gm, "\\n"))}
     />
   );
 };

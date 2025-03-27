@@ -125,3 +125,14 @@ space {
   background-image: url("./assets/circle.svg");
   background-color: rgba(255, 255, 255, 0);
 }
+
+.tiptap p:has(br) {
+  background-image: url("./assets/linebreak.svg");
+  background-color: rgba(255, 255, 255, 0);
+  background-repeat: no-repeat;
+  background-size: 30px;
+}
+
+.tiptap p:last-child:has(br) {
+  display: none;
+}

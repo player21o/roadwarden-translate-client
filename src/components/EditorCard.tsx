@@ -5,7 +5,10 @@ import { File } from "../hooks/FetchFile";
 import { Card } from "../protocol/packets";
 import { Drafts } from "../utils/localstorage";
 import { useMemo } from "react";
-import { convert_html_to_tags } from "../utils/schema_converter";
+import {
+  convert_html_to_tags,
+  convert_tags_to_html,
+} from "../utils/schema_converter";
 
 interface Props {
   index: number;
@@ -52,7 +55,7 @@ const EditorCard = ({ index, file, onChange, onCommit, drafts }: Props) => {
     if (file != null) {
       return file.cards[index].id.toString() in drafts
         ? drafts[file.cards[index].id]
-        : convert_html_to_tags(file.cards[index].translation);
+        : convert_tags_to_html(file.cards[index].translation);
     }
   }, [index, file]);
 
@@ -89,7 +92,7 @@ const EditorCard = ({ index, file, onChange, onCommit, drafts }: Props) => {
             <Tiptap
               width={window_width / 2 - 16 - 10}
               height={window_height - 130}
-              content={file.cards[index].original}
+              content={convert_tags_to_html(file.cards[index].original)}
               className="float-left ml-4"
               editable={false}
             />
