@@ -95,6 +95,7 @@ const EditorCard = ({ index, file, onChange, onCommit, drafts }: Props) => {
               content={convert_tags_to_html(file.cards[index].original)}
               className="float-left ml-4"
               editable={false}
+              colors={[]}
             />
             <Tiptap
               width={window_width / 2 - 16 - 10}
@@ -104,6 +105,7 @@ const EditorCard = ({ index, file, onChange, onCommit, drafts }: Props) => {
               onUpdate={(content) => {
                 if (onChange != undefined) onChange(file.cards[index], content);
               }}
+              colors={file.cards[index].original.match(/#....../g) as string[]}
               editable
             />
           </div>

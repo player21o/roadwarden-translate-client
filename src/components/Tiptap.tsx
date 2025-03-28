@@ -8,6 +8,7 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import { VariableNode } from "../nodes/variable_node";
+import { ReactNode } from "react";
 //import Color from "@tiptap/extension-color";
 
 interface Props {
@@ -16,22 +17,34 @@ interface Props {
   className: string;
   width: number;
   height: number;
+  colors: string[] | null;
   onUpdate?: (arg0: string) => void;
 }
 
 const BubbleMenuButton = ({
   icon,
+  children,
+  active,
   onClick,
 }: {
-  icon: string;
+  icon?: string;
+  children?: ReactNode;
+  active?: boolean;
   onClick: () => void;
 }) => {
   return (
     <button
       onClick={onClick}
-      className="bg-gray-950 z-50 focus:bg-gray-800 w-10 h-10 hover:cursor-pointer hover:bg-gray-900 text-center select-none"
+      className={`bg-gray-950 z-50 focus:bg-gray-800 ${
+        active ? "bg-gray-700 hover:bg-gray-600" : " hover:bg-gray-900"
+      } active w-10 h-10 hover:cursor-pointer  text-center select-none`}
     >
-      <p className="material-icons align-middle focus:translate-y-1">{icon}</p>
+      {icon && (
+        <p className="material-icons align-middle focus:translate-y-1">
+          {icon}
+        </p>
+      )}
+      {children}
     </button>
   );
 };
@@ -42,6 +55,7 @@ const Tiptap = ({
   className,
   width,
   height,
+  colors,
   onUpdate,
 }: Props) => {
   const editor = useEditor(
@@ -86,16 +100,42 @@ const Tiptap = ({
             <BubbleMenuButton
               onClick={() => editor.chain().focus().toggleItalic().run()}
               icon="format_italic"
+              active={editor.isActive("italic")}
             />
             <BubbleMenuButton
               onClick={() => editor.chain().focus().toggleBold().run()}
               icon="format_bold"
+              active={editor.isActive("bold")}
             />
             <BubbleMenuButton
-              //onClick={() => editor.chain().focus().appendGender().run()}
-              onClick={() => {}}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .setMark("gender", { type: "male" })
+                  .insertContentAt(
+                    editor.state.selection.$to.pos,
+                    '|<gender type="female">Женщина</gender>'
+                  )
+                  .run()
+              }
               icon="transgender"
             />
+            {colors &&
+              colors.map((color) => (
+                <BubbleMenuButton
+                  key={color}
+                  onClick={() =>
+                    editor.chain().focus().toggleMark("color").run()
+                  }
+                  active={editor.isActive("color", { color: color })}
+                >
+                  <div
+                    className={`bg-[${color}] rounded-full w-1/2 h-1/2 mx-auto`}
+                    style={{ background: color }}
+                  ></div>
+                </BubbleMenuButton>
+              ))}
           </div>
         </BubbleMenu>
       )}
