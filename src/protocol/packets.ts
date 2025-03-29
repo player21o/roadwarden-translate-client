@@ -222,7 +222,16 @@ const GetFile = {
   }),
   response: Response.extend({
     file: z.array(Card).optional(),
+    original_file: z.string().optional(),
   }),
+};
+
+const Commit = {
+  request: z.object({
+    card_id: z.number(),
+    content: z.string(),
+  }),
+  response: Response,
 };
 
 export const tracks = {
@@ -231,4 +240,5 @@ export const tracks = {
   get_user: GetUser,
   get_stats: GetStats,
   get_file: GetFile,
+  commit: Commit,
 };

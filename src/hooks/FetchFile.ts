@@ -6,6 +6,7 @@ export type File = {
   cards: Card[];
   visible_cards: Card[];
   name: string;
+  original: string;
 };
 
 export type Files = { [name: string]: File };
@@ -22,7 +23,7 @@ const useFetchFile = (
       setFile(cache[name]);
     } else {
       prot.send("get_file", { name: name }).then((p) => {
-        if (p.file != undefined) {
+        if (p.file != undefined && p.original_file != undefined) {
           const sorted = p.file.sort(
             ({ line_start: a }, { line_start: b }) => a - b
           );
@@ -31,11 +32,14 @@ const useFetchFile = (
             cards: sorted,
             visible_cards: sorted.filter((c) => !c.hidden),
             name: name,
+            original: p.original_file,
           };
+
+          console.log(p.original_file);
 
           setFile(return_file);
 
-          console.log(name);
+          //console.log(name);
 
           if (setCache != undefined && cache != undefined)
             setCache({ ...cache, [name]: return_file });
