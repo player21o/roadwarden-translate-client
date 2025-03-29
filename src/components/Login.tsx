@@ -2,25 +2,8 @@ import Spinner from "./Spinner";
 import { useAuthUser } from "../hooks/AuthUser";
 import { Navigate } from "react-router";
 
-const Login = () => {
+const Login = ({ redirect }: { redirect?: boolean }) => {
   const auth = useAuthUser();
-
-  /*
-  return (
-    <>
-      {user.authenticated ? "logged" : "not logged"}
-      <button
-        onClick={() => {
-          setUser({ ...user, authenticated: true });
-        }}
-      >
-        log in
-      </button>
-      <Spinner />
-      <Link to="/home">home</Link>
-    </>
-  );
-  */
 
   return auth != 200 ? (
     auth != 400 ? (
@@ -28,9 +11,9 @@ const Login = () => {
     ) : (
       <Navigate to="/" />
     )
-  ) : (
-    <Navigate to="/home" />
-  );
+  ) : redirect == true || redirect == undefined ? (
+    <Navigate to={"/home"} />
+  ) : null;
 };
 
 export default Login;

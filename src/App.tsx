@@ -48,7 +48,14 @@ function App() {
               }
             />
             <Route path="/login" element={<Login />} />
-            <Route path="/editor" element={<Editor />} />
+            <Route
+              path="/editor"
+              element={
+                <LoginProtected>
+                  <Editor />
+                </LoginProtected>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </ConnectionManager>

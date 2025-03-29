@@ -1,10 +1,16 @@
 import EditorCard from "./EditorCard";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useFetchFile, { Files } from "../hooks/FetchFile";
 import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
 import { useHotkeys } from "react-hotkeys-hook";
+import { UserContext } from "../contexts/UserContext";
+import useGetUser from "../hooks/GetUser";
+import { UserPermission } from "../protocol/packets";
 
 const Editor = () => {
+  const { user } = useContext(UserContext);
+  const me = useGetUser(user.id);
+
   const [files, setFiles] = useState<Files>({});
 
   const [windows, setWindowsState] = useState(
@@ -85,6 +91,11 @@ const Editor = () => {
     )
   );
 
+  useEffect(() => {
+    if (me != null)
+      console.log(me.permissions.includes([UserPermission.file, "all"]));
+  }, [me]);
+
   return windows.cards.length == 0 ? (
     <h1>No</h1>
   ) : (
@@ -94,6 +105,18 @@ const Editor = () => {
       drafts={drafts}
       onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
       onCommit={(_, content) => console.log(content.replace(/\n/gm, "\\n"))}
+      allowed={
+        me != null
+          ? me.permissions.filter(
+              (val) =>
+                val[0] == UserPermission.file &&
+                val[1] == windows.cards[windows.active].file
+            ).length > 0 ||
+            me.permissions.filter(
+              (val) => val[0] == UserPermission.file && val[1] == "all"
+            ).length > 0
+          : false
+      }
     />
   );
 };

@@ -35,11 +35,7 @@ const useFetchFile = (
             original: p.original_file,
           };
 
-          console.log(p.original_file);
-
           setFile(return_file);
-
-          //console.log(name);
 
           if (setCache != undefined && cache != undefined)
             setCache({ ...cache, [name]: return_file });

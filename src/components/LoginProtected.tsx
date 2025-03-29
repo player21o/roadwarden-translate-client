@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { Navigate } from "react-router";
+import Login from "./Login";
 
 interface Props {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface Props {
 const LoginProtected = ({ children }: Props) => {
   const { user } = useContext(UserContext);
 
-  return user.authenticated ? children : <Navigate to="/login" />;
+  return user.authenticated ? children : <Login redirect={false}></Login>;
 };
 
 export default LoginProtected;

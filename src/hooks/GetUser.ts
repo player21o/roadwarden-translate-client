@@ -6,7 +6,7 @@ export default function useGetUser(id: string) {
   const [user, setUser] = useState<null | User>(null);
 
   useEffect(() => {
-    console.log("get");
+    console.log(id);
     prot.send("get_user", { user_id: id }).then((answer) => {
       if (answer.user !== undefined) {
         setUser({
