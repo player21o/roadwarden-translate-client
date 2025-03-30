@@ -19,7 +19,7 @@ export class Protocol {
   //  [key in keyof typeof tracks]?: { interval: number; last_packet: number };
   //} = {};
 
-  private send_full_packet(full_packet: FullPacket, ws: WsType) {
+  public send_full_packet(full_packet: FullPacket, ws: WsType) {
     return new Promise<(typeof full_packet)["packet"]["response"]>(
       (resolve) => {
         // Updated return type

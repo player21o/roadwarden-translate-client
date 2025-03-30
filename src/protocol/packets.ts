@@ -234,11 +234,57 @@ const Commit = {
   response: Response,
 };
 
+const DictEntry = z.object({
+  id: z.number(),
+  original: z.array(z.string()),
+  translation: z.array(z.string()),
+  context: z.string(),
+  author: z.string(),
+});
+
+type DictEntry = z.infer<typeof DictEntry>;
+
+const Dict = z.record(z.number(), DictEntry);
+
+type Dict = z.infer<typeof Dict>;
+
+const GetDict = {
+  request: z.object({}),
+  response: Response.extend({
+    dict: Dict,
+  }),
+};
+
+const Bullet = <T extends z.ZodTypeAny>(data: T) => ({
+  request: z.object({}),
+  response: data,
+});
+
+const Update = Bullet(
+  z
+    .object({
+      type: z.literal("card"),
+      card: Card,
+    })
+    .or(
+      z.object({
+        type: z.literal("dict"),
+        operation: z.literal("alter").or(z.literal("delete")),
+        entry: DictEntry,
+      })
+    )
+);
+
 export const tracks = {
+  //bidirectional
   login: Login,
   get_info: GetInfo,
   get_user: GetUser,
   get_stats: GetStats,
   get_file: GetFile,
   commit: Commit,
+  get_dict: GetDict,
+
+  //server-to-client
+  update: Update,
 };
