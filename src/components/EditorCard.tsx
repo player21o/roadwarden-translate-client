@@ -9,12 +9,14 @@ import {
   convert_html_to_tags,
   convert_tags_to_html,
 } from "../utils/schema_converter";
+import Spinner from "./Spinner";
 
 interface Props {
   index: number;
   file: File | null;
   drafts: Drafts;
   allowed: boolean;
+  saving: boolean;
   onChange?: (arg0: Card, arg1: string) => void;
   onCommit?: (arg0: Card, arg1: string) => void;
 }
@@ -26,6 +28,7 @@ const EditorCard = ({
   onCommit,
   drafts,
   allowed,
+  saving,
 }: Props) => {
   const { width, height } = useWindowDimensions();
   /*
@@ -86,10 +89,10 @@ const EditorCard = ({
                       convert_html_to_tags(drafts[file.cards[index].id])
                     );
                 }}
-                disabled={!(file.cards[index].id in drafts)}
+                disabled={!(file.cards[index].id in drafts) || saving}
                 className="bg-blue-600 hover:bg-blue-500 text-white disabled:bg-gray-600 w-32 h-14 absolute right-0 enabled:cursor-pointer"
               >
-                <h2 className="relative">Сохранить</h2>
+                {saving ? <Spinner /> : <h2 className="relative">Сохранить</h2>}
               </button>
             )}
             <h1 className="text-3xl font-bold text-brightpale mt-2">

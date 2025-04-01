@@ -6,12 +6,17 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { UserContext } from "../contexts/UserContext";
 import useGetUser from "../hooks/GetUser";
 import { UserPermission } from "../protocol/packets";
+import useCommit from "../hooks/Commit";
+import useHandleUpdates from "../hooks/HandleUpdates";
 
 const Editor = () => {
   const { user } = useContext(UserContext);
   const me = useGetUser(user.id);
 
   const [files, setFiles] = useState<Files>({});
+  const [savingCards, setSavingCards] = useState<number[]>([]);
+
+  useHandleUpdates(files, setFiles);
 
   const [windows, setWindowsState] = useState(
     get_or_default("windows", {
@@ -104,7 +109,15 @@ const Editor = () => {
       file={useFetchFile(windows.cards[windows.active].file, files, setFiles)}
       drafts={drafts}
       onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
-      onCommit={(_, content) => console.log(content.replace(/\n/gm, "\\n"))}
+      onCommit={(card, content) =>
+        useCommit({
+          cache: [savingCards, setSavingCards],
+          card_id: card.id,
+          content: content,
+          drafts: [drafts, setDrafts],
+        })
+      }
+      saving={false}
       allowed={
         me != null
           ? me.permissions.filter(

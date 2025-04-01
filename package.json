@@ -16,7 +16,7 @@
     "@tiptap/extension-paragraph": "^2.11.5",
     "@tiptap/extension-text": "^2.11.5",
     "@tiptap/pm": "^2.11.5",
-    "@tiptap/react": "^2.11.5",
+    "@tiptap/react": "^2.11.7",
     "chart.js": "^4.4.7",
     "material-icons": "^1.13.13",
     "msgpack-lite": "^0.1.26",

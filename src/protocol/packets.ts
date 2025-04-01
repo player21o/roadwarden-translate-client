@@ -212,6 +212,7 @@ const Card = z.object({
   hidden: z.boolean(),
   line_start: z.number(),
   line_end: z.number(),
+  file: z.string(),
 });
 
 export type Card = z.infer<typeof Card>;
@@ -256,7 +257,7 @@ const GetDict = {
 };
 
 const Bullet = <T extends z.ZodTypeAny>(data: T) => ({
-  request: z.object({}),
+  request: data,
   response: data,
 });
 
