@@ -78,7 +78,10 @@ const Tiptap = ({
       //content: "<p><space>&nbsp;</space></p>",
       editable,
       onUpdate: ({ editor }) => {
-        if (onUpdate != undefined) onUpdate(editor.getHTML());
+        {
+          //console.log(editor.getHTML());
+          onUpdate?.(editor.getHTML());
+        }
       },
     },
     [content]
@@ -124,7 +127,7 @@ const Tiptap = ({
             {colors &&
               colors.map((color) => (
                 <BubbleMenuButton
-                  key={color}
+                  key={Math.random()}
                   onClick={() =>
                     editor.chain().focus().toggleMark("color").run()
                   }

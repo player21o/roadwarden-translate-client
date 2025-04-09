@@ -1,8 +1,8 @@
 import { prot } from "../protocol/client";
 import { Status } from "../protocol/packets";
-import { Drafts } from "../utils/localstorage";
+import { Drafts } from "./localstorage";
 
-const useCommit = ({
+const commit = ({
   cache: [cache, setCache],
   drafts: [drafts, setDrafts],
   card_id,
@@ -28,4 +28,4 @@ const useCommit = ({
     });
 };
 
-export default useCommit;
+export default commit;

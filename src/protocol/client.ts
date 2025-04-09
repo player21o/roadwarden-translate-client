@@ -11,6 +11,8 @@ class ClientProtocol extends Protocol {
   public constructor() {
     super();
 
+    this.event_emitter.setMaxListeners(0);
+
     this.connect();
   }
 

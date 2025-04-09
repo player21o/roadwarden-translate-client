@@ -36,7 +36,7 @@ const EditorCard = ({
   const [card, setCard] = useState<Card | null>(null);
   */
 
-  const [window_width, window_height] = [width - 800, height - 200];
+  const [window_width, window_height] = [width - 200, height - 200];
 
   /*
   useHotkeys("ctrl+arrowdown", () => go_to_card(1, true));

@@ -6,8 +6,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { UserContext } from "../contexts/UserContext";
 import useGetUser from "../hooks/GetUser";
 import { UserPermission } from "../protocol/packets";
-import useCommit from "../hooks/Commit";
 import useHandleUpdates from "../hooks/HandleUpdates";
+import commit from "../utils/commit";
 
 const Editor = () => {
   const { user } = useContext(UserContext);
@@ -97,9 +97,8 @@ const Editor = () => {
   );
 
   useEffect(() => {
-    if (me != null)
-      console.log(me.permissions.includes([UserPermission.file, "all"]));
-  }, [me]);
+    console.log(files);
+  }, [files]);
 
   return windows.cards.length == 0 ? (
     <h1>No</h1>
@@ -109,14 +108,15 @@ const Editor = () => {
       file={useFetchFile(windows.cards[windows.active].file, files, setFiles)}
       drafts={drafts}
       onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
-      onCommit={(card, content) =>
-        useCommit({
+      onCommit={(card, content) => {
+        console.log(content);
+        commit({
           cache: [savingCards, setSavingCards],
           card_id: card.id,
           content: content,
           drafts: [drafts, setDrafts],
-        })
-      }
+        });
+      }}
       saving={false}
       allowed={
         me != null

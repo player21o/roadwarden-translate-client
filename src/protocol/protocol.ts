@@ -14,7 +14,7 @@ export interface SendPacketArgs {
 export class Protocol {
   private resolves: { [key: number]: (packet: any) => void } = {};
 
-  private event_emitter = new EventEmitter();
+  public event_emitter = new EventEmitter();
   //private event_emitter_rate_limits: {
   //  [key in keyof typeof tracks]?: { interval: number; last_packet: number };
   //} = {};
@@ -131,6 +131,10 @@ export class Protocol {
     */
 
     return this.event_emitter.on(track.toString(), callback);
+  }
+
+  public off(track: keyof typeof tracks) {
+    this.event_emitter.removeAllListeners(track);
   }
 
   private encode_packet(packet: FullPacket) {

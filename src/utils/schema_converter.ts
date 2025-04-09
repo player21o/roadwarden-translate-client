@@ -98,7 +98,7 @@ export function convert_html_to_tags(data: string) {
     .replace(/<p>/g, "")
 
     .replace(/<var>/g, "[")
-    .replace(/<\/var>/g, "]")
+    .replace(/<\/var>/g, "]");
 
-    .slice(0, -1); //to delete trailing \n
+  //.slice(0, -1); //to delete trailing \n
 }
