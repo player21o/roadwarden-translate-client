@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "@tiptap/extension-bold": "^2.11.5",
     "@tiptap/extension-document": "^2.11.5",
     "@tiptap/extension-italic": "^2.11.5",
@@ -25,6 +26,7 @@
     "react-dom": "^18.3.1",
     "react-hotkeys-hook": "^4.6.1",
     "react-router": "^7.1.4",
+    "tippy.js": "^6.3.7",
     "vite-plugin-node-polyfills": "^0.23.0",
     "zod": "^3.24.2"
   },

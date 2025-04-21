@@ -17,6 +17,8 @@ const useListen = <T extends keyof typeof tracks>(
 ) => {
   useEffect(() => {
     prot.listen(track, callback);
+
+    return () => prot.off(track);
   }, deps);
 };
 

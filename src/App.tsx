@@ -8,6 +8,7 @@ import { useState } from "react";
 import Landing from "./components/Landing";
 import ConnectionManager from "./components/ConnectionManager";
 import Editor from "./components/Editor";
+import "tippy.js/dist/tippy.css";
 
 /*
 function App() {

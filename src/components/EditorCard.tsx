@@ -10,6 +10,8 @@ import {
   convert_tags_to_html,
 } from "../utils/schema_converter";
 import Spinner from "./Spinner";
+import { clamp_number } from "../utils/utilities";
+import Tippy from "@tippyjs/react";
 
 interface Props {
   index: number;
@@ -31,36 +33,11 @@ const EditorCard = ({
   saving,
 }: Props) => {
   const { width, height } = useWindowDimensions();
-  /*
-  const [index, setIndex] = useState(start_index);
-  const [card, setCard] = useState<Card | null>(null);
-  */
 
-  const [window_width, window_height] = [width - 200, height - 200];
-
-  /*
-  useHotkeys("ctrl+arrowdown", () => go_to_card(1, true));
-  useHotkeys("ctrl+arrowup", () => go_to_card(-1, true));
-
-  useEffect(() => {
-    if (file != undefined) setCard(file.visible_cards[index]);
-  }, [file]);
-
-  useEffect(() => {
-    if (file != undefined) setCard(file.visible_cards[index]);
-  }, [index]);
-
-  const go_to_card = (ind: number, relative?: boolean) => {
-    if (file != null) {
-      const new_ind =
-        relative != undefined && relative == true ? index + ind : ind;
-
-      if (new_ind >= 0 && new_ind <= file.visible_cards.length - 1) {
-        setIndex(new_ind);
-      }
-    }
-  };
-  */
+  const [window_width, window_height] = [
+    clamp_number(width - 600, 600, 1000),
+    height - 200,
+  ];
 
   const translation = useMemo<string | undefined>(() => {
     if (file != null) {
@@ -101,7 +78,20 @@ const EditorCard = ({
             </h1>
           </div>
           <hr className="border-chestnut" />
-          <div className="mt-12">
+          <div>
+            <Tippy
+              content={"Перейти к карточке..."}
+              placement="bottom"
+              className="bg-black"
+            >
+              <button className="align-bottom m-auto text-darkpale hover:text-brightpale">
+                <span className="!text-5xl material-icons align-bottom">
+                  swap_horiz
+                </span>
+              </button>
+            </Tippy>
+          </div>
+          <div className="">
             <Tiptap
               width={window_width / 2 - 16 - 10}
               height={window_height - 130}

@@ -1,5 +1,5 @@
 import EditorCard from "./EditorCard";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import useFetchFile, { Files } from "../hooks/FetchFile";
 import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -95,10 +95,6 @@ const Editor = () => {
       true
     )
   );
-
-  useEffect(() => {
-    console.log(files);
-  }, [files]);
 
   return windows.cards.length == 0 ? (
     <h1>No</h1>
