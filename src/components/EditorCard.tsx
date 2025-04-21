@@ -11,7 +11,7 @@ import {
 } from "../utils/schema_converter";
 import Spinner from "./Spinner";
 import { clamp_number } from "../utils/utilities";
-import Tippy from "@tippyjs/react";
+import IconButton from "./IconButton";
 
 interface Props {
   index: number;
@@ -79,17 +79,13 @@ const EditorCard = ({
           </div>
           <hr className="border-chestnut" />
           <div>
-            <Tippy
-              content={"Перейти к карточке..."}
+            <IconButton
+              className="text-5xl"
+              tooltip="Перейти к карточке..."
               placement="bottom"
-              className="bg-black"
             >
-              <button className="align-bottom m-auto text-darkpale hover:text-brightpale">
-                <span className="!text-5xl material-icons align-bottom">
-                  swap_horiz
-                </span>
-              </button>
-            </Tippy>
+              swap_horiz
+            </IconButton>
           </div>
           <div className="">
             <Tiptap

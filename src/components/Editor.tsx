@@ -113,7 +113,7 @@ const Editor = () => {
           drafts: [drafts, setDrafts],
         });
       }}
-      saving={false}
+      saving={true}
       allowed={
         me != null
           ? me.permissions.filter(
