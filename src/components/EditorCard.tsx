@@ -4,7 +4,7 @@ import Tiptap from "./Tiptap";
 import { File } from "../hooks/FetchFile";
 import { Card } from "../protocol/packets";
 import { Drafts } from "../utils/localstorage";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import {
   convert_html_to_tags,
   convert_tags_to_html,
@@ -19,8 +19,10 @@ interface Props {
   drafts: Drafts;
   allowed: boolean;
   saving: boolean;
+  children?: ReactNode;
   onChange?: (arg0: Card, arg1: string) => void;
   onCommit?: (arg0: Card, arg1: string) => void;
+  onJump: () => void;
 }
 
 const EditorCard = ({
@@ -31,6 +33,8 @@ const EditorCard = ({
   drafts,
   allowed,
   saving,
+  children,
+  onJump,
 }: Props) => {
   const { width, height } = useWindowDimensions();
 
@@ -54,6 +58,7 @@ const EditorCard = ({
       x={width / 2}
       y={height / 2}
     >
+      {children}
       {file && translation != undefined && (
         <>
           <div className="h-14">
@@ -83,6 +88,7 @@ const EditorCard = ({
               className="text-5xl"
               tooltip="Перейти к карточке..."
               placement="bottom"
+              onClick={onJump}
             >
               swap_horiz
             </IconButton>

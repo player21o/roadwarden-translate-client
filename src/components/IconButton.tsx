@@ -7,12 +7,24 @@ interface Props {
   tooltip?: string | ReactNode;
   className?: string;
   placement?: Placement;
+  onClick?: () => void;
 }
 
-const IconButton = ({ children, tooltip, className, placement }: Props) => {
+const IconButton = ({
+  children,
+  tooltip,
+  className,
+  placement,
+  onClick,
+}: Props) => {
   return tooltip ? (
     <Tippy content={tooltip} placement={placement} className="bg-black">
-      <button className="align-bottom m-auto text-darkpale hover:text-brightpale">
+      <button
+        className={`!${
+          className == undefined ? "" : className
+        } align-bottom m-auto text-darkpale hover:text-brightpale`}
+        onClick={onClick}
+      >
         <span
           className={`!${
             className == undefined ? "" : className
@@ -23,7 +35,10 @@ const IconButton = ({ children, tooltip, className, placement }: Props) => {
       </button>
     </Tippy>
   ) : (
-    <button className="align-bottom m-auto text-darkpale hover:text-brightpale">
+    <button
+      className="align-bottom m-auto text-darkpale hover:text-brightpale"
+      onClick={onClick}
+    >
       <span
         className={`!${
           className == undefined ? "" : className
