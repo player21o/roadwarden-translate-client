@@ -110,7 +110,11 @@ const EditorCard = ({
               onUpdate={(content) => {
                 if (onChange != undefined) onChange(file.cards[index], content);
               }}
-              colors={file.cards[index].original.match(/#....../g) as string[]}
+              colors={
+                [
+                  ...new Set(file.cards[index].original.match(/#....../g)),
+                ] as string[]
+              }
               editable
             />
           </div>

@@ -18,7 +18,11 @@ const IconButton = ({
   onClick,
 }: Props) => {
   return tooltip ? (
-    <Tippy content={tooltip} placement={placement} className="bg-black">
+    <Tippy
+      content={tooltip}
+      placement={placement}
+      className="bg-black p-1 rounded"
+    >
       <button
         className={`!${
           className == undefined ? "" : className
@@ -26,7 +30,7 @@ const IconButton = ({
         onClick={onClick}
       >
         <span
-          className={`!${
+          className={`${
             className == undefined ? "" : className
           } material-icons align-bottom`}
         >

@@ -35,8 +35,10 @@ const BubbleMenuButton = ({
   return (
     <button
       onClick={onClick}
-      className={`bg-gray-950 z-50 focus:bg-gray-800 ${
-        active ? "bg-gray-700 hover:bg-gray-600" : " hover:bg-gray-900"
+      className={`z-50 focus:bg-gray-800 ${
+        active
+          ? "bg-gray-700 hover:bg-gray-600"
+          : "bg-gray-950 hover:bg-gray-900"
       } active w-10 h-10 hover:cursor-pointer  text-center select-none`}
     >
       {icon && (
@@ -127,10 +129,11 @@ const Tiptap = ({
             {colors &&
               colors.map((color) => (
                 <BubbleMenuButton
-                  key={Math.random()}
-                  onClick={() =>
-                    editor.chain().focus().toggleMark("color").run()
-                  }
+                  key={color}
+                  onClick={() => {
+                    editor.chain().focus().toggleMark("color", { color }).run();
+                    console.log(color);
+                  }}
                   active={editor.isActive("color", { color: color })}
                 >
                   <div
@@ -148,7 +151,7 @@ const Tiptap = ({
         //contentEditable
         style={{ width, height }}
         className={
-          "text-left font-philosopher text-pale text-2xl relative leading-7 border-chestnut border-2 rounded overflow-x-auto p-2 " +
+          "text-left font-philosopher text-pale text-2xl relative leading-7 border-chestnut border-2 overflow-x-auto p-2 " +
           className
         }
       />
