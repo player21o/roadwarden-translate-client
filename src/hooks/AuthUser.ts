@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
+import UserContext from "../contexts/UserContext";
 import { prot } from "../protocol/client";
 import { lc } from "../utils/localstorage";
 import { useSearchParams } from "react-router";

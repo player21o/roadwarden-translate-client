@@ -4,7 +4,7 @@ import { Drafts, Windows } from "../utils/localstorage";
 import EditorCard from "./EditorCard";
 import commit from "../utils/commit";
 import { useContext, useState } from "react";
-import { UserContext } from "../contexts/UserContext";
+import UserContext from "../contexts/UserContext";
 import useGetUser from "../hooks/GetUser";
 import { UserPermission } from "../protocol/packets";
 import EditorCardJump from "./EditorCardJump";

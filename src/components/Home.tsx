@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import HomeCard from "./HomeCard";
-import { UserContext } from "../contexts/UserContext";
+import UserContext from "../contexts/UserContext";
 import useGetUser from "../hooks/GetUser";
 import { UserPermission } from "../protocol/packets";
 import {

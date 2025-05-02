@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import LoginProtected from "./components/LoginProtected";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import { UserContext } from "./contexts/UserContext";
+import UserContext from "./contexts/UserContext";
 import { useState } from "react";
 import Landing from "./components/Landing";
 import ConnectionManager from "./components/ConnectionManager";

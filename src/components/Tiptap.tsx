@@ -130,10 +130,9 @@ const Tiptap = ({
               colors.map((color) => (
                 <BubbleMenuButton
                   key={color}
-                  onClick={() => {
-                    editor.chain().focus().toggleMark("color", { color }).run();
-                    console.log(color);
-                  }}
+                  onClick={() =>
+                    editor.chain().focus().toggleMark("color", { color }).run()
+                  }
                   active={editor.isActive("color", { color: color })}
                 >
                   <div

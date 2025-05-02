@@ -1,17 +1,16 @@
-import useWindowDimensions from "../hooks/WindowDimensions";
 import EditorWindow from "./EditorWindow";
 import Tiptap from "./Tiptap";
 import { File } from "../hooks/FetchFile";
 import { Card } from "../protocol/packets";
 import { Drafts } from "../utils/localstorage";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useContext, useMemo } from "react";
 import {
   convert_html_to_tags,
   convert_tags_to_html,
 } from "../utils/schema_converter";
 import Spinner from "./Spinner";
-import { clamp_number } from "../utils/utilities";
 import IconButton from "./IconButton";
+import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 
 interface Props {
   index: number;
@@ -36,12 +35,8 @@ const EditorCard = ({
   children,
   onJump,
 }: Props) => {
-  const { width, height } = useWindowDimensions();
-
-  const [window_width, window_height] = [
-    clamp_number(width - 600, 600, 1000),
-    height - 200,
-  ];
+  const { window_width, window_height, screen_width, screen_height } =
+    useContext(EditorWindowSizeContext);
 
   const translation = useMemo<string | undefined>(() => {
     if (file != null) {
@@ -55,8 +50,8 @@ const EditorCard = ({
     <EditorWindow
       width={window_width}
       height={window_height}
-      x={width / 2}
-      y={height / 2}
+      x={screen_width / 2}
+      y={screen_height / 2}
     >
       {children}
       {file && translation != undefined && (

@@ -3,8 +3,18 @@ import { Files } from "../hooks/FetchFile";
 import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
 import useHandleUpdates from "../hooks/HandleUpdates";
 import EditorCardController from "./EditorCardController";
+import EditorTabs from "./EditorTabs";
+import useWindowDimensions from "../hooks/WindowDimensions";
+import { clamp_number } from "../utils/utilities";
+import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 
 const Editor = () => {
+  const { width, height } = useWindowDimensions();
+  const [window_width, window_height] = [
+    clamp_number(width - 600, 600, 1000),
+    height - 200,
+  ];
+
   const [files, setFiles] = useState<Files>({});
   const [savingCards, setSavingCards] = useState<number[]>([]);
 
@@ -34,16 +44,26 @@ const Editor = () => {
   return windows.cards.length == 0 ? (
     <h1>No</h1>
   ) : (
-    <EditorCardController
-      drafts={drafts}
-      files={files}
-      savingCards={savingCards}
-      setDrafts={setDrafts}
-      setFiles={setFiles}
-      setSavingCards={setSavingCards}
-      setWindows={setWindows}
-      windows={windows}
-    />
+    <EditorWindowSizeContext.Provider
+      value={{
+        window_width: window_width,
+        window_height: window_height,
+        screen_height: height,
+        screen_width: width,
+      }}
+    >
+      <EditorTabs windows={windows} />
+      <EditorCardController
+        drafts={drafts}
+        files={files}
+        savingCards={savingCards}
+        setDrafts={setDrafts}
+        setFiles={setFiles}
+        setSavingCards={setSavingCards}
+        setWindows={setWindows}
+        windows={windows}
+      />
+    </EditorWindowSizeContext.Provider>
   );
 };
 
