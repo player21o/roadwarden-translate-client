@@ -52,7 +52,16 @@ const Editor = () => {
         screen_width: width,
       }}
     >
-      <EditorTabs windows={windows} />
+      <EditorTabs
+        windows={windows}
+        onNewWindow={() =>
+          setWindows({
+            ...windows,
+            cards: [...windows.cards, { file: "prologue", index: 0 }],
+          })
+        }
+        onFocusWindow={(i) => setWindows({ ...windows, active: i })}
+      />
       <EditorCardController
         drafts={drafts}
         files={files}

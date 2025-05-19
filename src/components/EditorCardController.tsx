@@ -59,11 +59,11 @@ const EditorCardController = ({
   const set_card_index = (index: number) => {
     setWindows({
       ...windows,
-      cards: windows.cards.map((_, i) => {
+      cards: windows.cards.map((w, i) => {
         if (i == windows.active) {
-          return { ...window, index: index };
+          return { ...w, index: index };
         } else {
-          return window;
+          return w;
         }
       }),
     });

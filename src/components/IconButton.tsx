@@ -6,6 +6,7 @@ interface Props {
   children: string;
   tooltip?: string | ReactNode;
   className?: string;
+  btnClassName?: string;
   placement?: Placement;
   onClick?: () => void;
 }
@@ -14,6 +15,7 @@ const IconButton = ({
   children,
   tooltip,
   className,
+  btnClassName,
   placement,
   onClick,
 }: Props) => {
@@ -24,8 +26,8 @@ const IconButton = ({
       className="bg-black p-1 rounded"
     >
       <button
-        className={`!${
-          className == undefined ? "" : className
+        className={`${
+          btnClassName == undefined ? "" : btnClassName
         } align-bottom m-auto text-darkpale hover:text-brightpale`}
         onClick={onClick}
       >
@@ -40,7 +42,9 @@ const IconButton = ({
     </Tippy>
   ) : (
     <button
-      className="align-bottom m-auto text-darkpale hover:text-brightpale"
+      className={`${
+        btnClassName == undefined ? "" : btnClassName
+      } align-bottom m-auto text-darkpale hover:text-brightpale`}
       onClick={onClick}
     >
       <span
