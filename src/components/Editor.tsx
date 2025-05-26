@@ -60,6 +60,13 @@ const Editor = () => {
             cards: [...windows.cards, { file: "prologue", index: 0 }],
           })
         }
+        onCloseWindow={(index) =>
+          setWindows({
+            ...windows,
+            cards: windows.cards.filter((_, i) => i != index),
+            active: windows.active > 0 ? windows.active - 1 : 0,
+          })
+        }
         onFocusWindow={(i) => setWindows({ ...windows, active: i })}
       />
       <EditorCardController

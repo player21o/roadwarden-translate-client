@@ -1,5 +1,5 @@
 import Tippy from "@tippyjs/react";
-import { ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import { Placement } from "tippy.js";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   className?: string;
   btnClassName?: string;
   placement?: Placement;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const IconButton = ({
@@ -29,6 +29,7 @@ const IconButton = ({
         className={`${
           btnClassName == undefined ? "" : btnClassName
         } align-bottom m-auto text-darkpale hover:text-brightpale`}
+        //onClick={onClick}
         onClick={onClick}
       >
         <span
