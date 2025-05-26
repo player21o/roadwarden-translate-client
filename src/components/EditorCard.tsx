@@ -11,6 +11,7 @@ import {
 import Spinner from "./Spinner";
 import IconButton from "./IconButton";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
+import { useHotkeys } from "react-hotkeys-hook";
 
 interface Props {
   index: number;
@@ -45,6 +46,18 @@ const EditorCard = ({
         : convert_tags_to_html(file.cards[index].translation);
     }
   }, [index, file]);
+
+  useHotkeys(
+    "ctrl+s",
+    (e) => {
+      if (file != null && onCommit != undefined)
+        onCommit(
+          file.cards[index],
+          convert_html_to_tags(drafts[file.cards[index].id])
+        );
+    },
+    { enableOnContentEditable: true, preventDefault: true }
+  );
 
   return (
     <EditorWindow
