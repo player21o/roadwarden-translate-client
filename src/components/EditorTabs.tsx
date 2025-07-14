@@ -1,7 +1,8 @@
-import { useContext, useRef, useState } from "react";
+import { memo, useContext, useMemo, useRef, useState } from "react";
 import { Windows } from "../utils/localstorage";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 import IconButton from "./IconButton";
+import EditorTab from "./EditorTab";
 
 interface Props {
   windows: Windows;
@@ -22,6 +23,19 @@ const EditorTabs = ({
   const border_thickness = useRef(3);
   const [hoveredWindow, setHoveredWindow] = useState(-1);
 
+  const addWindowButton = useMemo(
+    () => (
+      <IconButton
+        btnClassName="!m-0 align-middle"
+        tooltip="Открыть карточку"
+        onClick={onNewWindow}
+      >
+        add
+      </IconButton>
+    ),
+    [onNewWindow]
+  );
+
   return (
     <div
       style={{
@@ -36,40 +50,19 @@ const EditorTabs = ({
       className="absolute flex flex-row justify-start items-center gap-2 overflow-auto"
     >
       {windows.cards.map((window, i) => (
-        <div
+        <EditorTab
+          active_window={windows.active == i}
+          file_name={window.file}
+          hovered={hoveredWindow == i}
+          card_index={window.index}
+          window_index={i}
           key={window.file + window.index + i}
-          className={`${
-            windows.active == windows.cards.indexOf(window)
-              ? "border-brightpale text-brightpale z-10"
-              : "border-chestnut text-chestnut z-0"
-          } border-2 p-2 border-b-0 bg-darkdarkblue cursor-pointer relative`}
-          onClick={() => onFocusWindow(i)}
-          onMouseEnter={() => setHoveredWindow(i)}
-          onMouseLeave={() => setHoveredWindow(-1)}
-        >
-          {hoveredWindow == i && (
-            <IconButton
-              btnClassName="align-middle absolute bg-black !white rounded-full scale-75 right-0 top-0 z-50"
-              onClick={(event) => {
-                onCloseWindow(i);
-                event.stopPropagation();
-              }}
-            >
-              close
-            </IconButton>
-          )}
-          <p>
-            {window.file} - {window.index + 1}
-          </p>
-        </div>
+          onFocusWindow={onFocusWindow}
+          setHoveredWindow={setHoveredWindow}
+          onCloseWindow={onCloseWindow}
+        />
       ))}
-      <IconButton
-        btnClassName="!m-0 align-middle"
-        tooltip="Открыть карточку"
-        onClick={onNewWindow}
-      >
-        add
-      </IconButton>
+      {addWindowButton}
     </div>
   );
 };

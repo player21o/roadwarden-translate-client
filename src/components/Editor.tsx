@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Files } from "../hooks/FetchFile";
 import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
 import useHandleUpdates from "../hooks/HandleUpdates";
