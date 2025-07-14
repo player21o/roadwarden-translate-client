@@ -96,7 +96,11 @@ const EditorCard = ({
               className="!text-4xl"
               tooltip="Перейти к карточке..."
               placement="bottom"
-              onClick={onJump}
+              onClick={(e) => {
+                (e.target as any).blur();
+                (e.currentTarget as any).blur();
+                onJump();
+              }}
             >
               swap_horiz
             </IconButton>

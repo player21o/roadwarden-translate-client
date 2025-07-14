@@ -26,6 +26,7 @@ const IconButton = ({
       className="bg-black p-1 rounded"
     >
       <button
+        tabIndex={-1}
         className={`${
           btnClassName == undefined ? "" : btnClassName
         } align-bottom m-auto text-darkpale hover:text-brightpale`}
@@ -43,6 +44,7 @@ const IconButton = ({
     </Tippy>
   ) : (
     <button
+      tabIndex={-1}
       className={`${
         btnClassName == undefined ? "" : btnClassName
       } align-bottom m-auto text-darkpale hover:text-brightpale`}
