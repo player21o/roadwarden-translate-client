@@ -49,7 +49,7 @@ const EditorCard = ({
 
   useHotkeys(
     "ctrl+s",
-    (e) => {
+    (_e) => {
       if (file != null && onCommit != undefined)
         onCommit(
           file.cards[index],

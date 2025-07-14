@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { Windows } from "../utils/localstorage";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 import IconButton from "./IconButton";

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Files } from "../hooks/FetchFile";
 import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
 import useHandleUpdates from "../hooks/HandleUpdates";
@@ -7,6 +7,7 @@ import EditorTabs from "./EditorTabs";
 import useWindowDimensions from "../hooks/WindowDimensions";
 import { clamp_number } from "../utils/utilities";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
+import IconButton from "./IconButton";
 
 const Editor = () => {
   const { width, height } = useWindowDimensions();
@@ -42,7 +43,16 @@ const Editor = () => {
   };
 
   return windows.cards.length == 0 ? (
-    <h1>No</h1>
+    <IconButton
+      onClick={() =>
+        setWindows({
+          ...windows,
+          cards: [...windows.cards, { file: "prologue", index: 0 }],
+        })
+      }
+    >
+      add
+    </IconButton>
   ) : (
     <EditorWindowSizeContext.Provider
       value={{
