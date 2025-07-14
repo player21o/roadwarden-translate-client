@@ -7,11 +7,13 @@ const commit = ({
   drafts: [drafts, setDrafts],
   card_id,
   content,
+  onCommit,
 }: {
   cache: [number[], (arg0: number[]) => void];
   drafts: [Drafts, (arg0: Drafts) => void];
   card_id: number;
   content: string;
+  onCommit?: () => void;
 }) => {
   setCache([...cache, card_id]);
 
@@ -25,6 +27,8 @@ const commit = ({
         delete mod[card_id];
         setDrafts({ ...mod });
       }
+
+      if (onCommit != undefined) onCommit();
     });
 };
 

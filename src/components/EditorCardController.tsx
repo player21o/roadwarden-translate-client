@@ -36,6 +36,7 @@ const EditorCardController = ({
   const window = windows.cards[windows.active];
 
   const [jump, setJump] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const toggle_jump = () => (jump ? setJump(false) : setJump(true));
 
@@ -107,14 +108,16 @@ const EditorCardController = ({
       drafts={drafts}
       onChange={(card, content) => setDrafts({ ...drafts, [card.id]: content })}
       onCommit={(card, content) => {
+        setSaving(true);
         commit({
           cache: [savingCards, setSavingCards],
           card_id: card.id,
           content: content,
           drafts: [drafts, setDrafts],
+          onCommit: () => setSaving(false),
         });
       }}
-      saving={false}
+      saving={saving}
       allowed={
         me != null
           ? me.permissions.filter(
