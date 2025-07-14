@@ -9,7 +9,6 @@ import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import { VariableNode } from "../nodes/variable_node";
 import { ReactNode } from "react";
-//import Color from "@tiptap/extension-color";
 
 interface Props {
   editable: boolean;
@@ -130,9 +129,10 @@ const Tiptap = ({
               colors.map((color) => (
                 <BubbleMenuButton
                   key={color}
-                  onClick={() =>
-                    editor.chain().focus().toggleMark("color", { color }).run()
-                  }
+                  onClick={() => {
+                    console.log(color);
+                    editor.chain().focus().toggleMark("color", { color }).run();
+                  }}
                   active={editor.isActive("color", { color: color })}
                 >
                   <div

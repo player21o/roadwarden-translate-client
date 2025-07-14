@@ -9,3 +9,11 @@ export function isNumeric(str: string) {
     !isNaN(parseFloat(str))
   ); // ...and ensure strings of whitespace fail
 }
+
+export function escapeRegExp(string: string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}
+
+export function rgbToHex(r: number, g: number, b: number) {
+  return "#" + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+}

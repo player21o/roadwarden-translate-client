@@ -1,7 +1,9 @@
+import { escapeRegExp, rgbToHex } from "./utilities";
+
 export function convert_tags_to_html(data: string) {
   //console.log(data.replace(/\n/gm, "</p><p>"));
 
-  data = data.replace(/ /g, "<space> </space>");
+  data = data.replace(/ /g, "<space>&nbsp;</space>");
 
   const matches = [...data.matchAll(/{color=/g)];
 
@@ -47,35 +49,30 @@ export function convert_tags_to_html(data: string) {
 }
 
 export function convert_html_to_tags(data: string) {
-  data = data.replace(/<space>[^<]*<\/space>/g, " ");
+  data = data
+    .replace(/<space>/g, "")
+    .replace(/<\/space>/g, "")
+    .replace(/&nbsp;/g, " ");
 
-  const matches = [...data.matchAll(/<color style="color: /g)];
+  const rgb_matches = [...data.matchAll(/rgb\([^,]*, [^,]*, [^,]*\)/gm)];
 
-  const to_append = "{color=";
-  let offset = 0;
-
-  matches.forEach((match) => {
-    const index = match.index + offset;
-
-    data = [
-      data.substring(0, index),
-      to_append,
-      data.substring(
-        index + '<color style="color: '.length,
-        index + '<color style="color: '.length + 7
-      ),
-      "}",
-      data.substring(
-        index + '<color style="color: '.length + 6 + 3,
-        data.length
-      ),
-    ].join("");
-
-    offset +=
-      to_append.length - '<color style="color: '.length + "}".length - 2;
+  rgb_matches.forEach((match) => {
+    data = data.replace(
+      new RegExp(escapeRegExp(match[0]), "g"),
+      rgbToHex(
+        parseInt(match[0].split(",")[0].split("(")[1]),
+        parseInt(match[0].split(",")[1]),
+        parseInt(match[0].split(",")[2].split(")")[0])
+      )
+    );
   });
 
-  return data
+  data = data.replace(
+    /<color style="color: (#\w{6});?">(.*?)<\/color>/g,
+    "{color=$1}$2{/color}"
+  );
+
+  const r = data
     .replace(/<gender [^<]* type="male">/g, "{g}")
     .replace(/<gender [^<]* type="female">/g, "")
     .replace(/<\/gender>(?!\|)/g, "{/g}")
@@ -99,6 +96,8 @@ export function convert_html_to_tags(data: string) {
 
     .replace(/<var>/g, "[")
     .replace(/<\/var>/g, "]");
+
+  return r;
 
   //.slice(0, -1); //to delete trailing \n
 }

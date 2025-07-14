@@ -20,6 +20,10 @@ export const Space = Mark.create({
   },
 
   //addInputRules() {
-  //  return [markInputRule({ find: / /, type: this.type })];
+  //  return [markInputRule({ find: / /g, type: this.type })];
+  //},
+
+  //addPasteRules() {
+  //  return [markPasteRule({ find: / /g, type: this.type })];
   //},
 });

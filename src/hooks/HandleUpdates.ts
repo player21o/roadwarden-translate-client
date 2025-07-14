@@ -5,7 +5,7 @@ const useHandleUpdates = (files: Files, setFiles: (arg0: Files) => void) => {
   useListen(
     "update",
     ({ data }) => {
-      console.log(data);
+      //console.log(data);
       if (data.type == "card") {
         //card updates
         const card = data.card;
