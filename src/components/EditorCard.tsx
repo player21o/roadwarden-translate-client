@@ -93,12 +93,20 @@ const EditorCard = ({
           <hr className="border-chestnut" />
           <div>
             <IconButton
-              className="text-5xl"
+              className="!text-4xl"
               tooltip="Перейти к карточке..."
               placement="bottom"
               onClick={onJump}
             >
               swap_horiz
+            </IconButton>
+            <IconButton
+              className="!text-4xl"
+              tooltip="Искать в файле..."
+              placement="bottom"
+              onClick={onJump}
+            >
+              search
             </IconButton>
           </div>
           <div className="">
