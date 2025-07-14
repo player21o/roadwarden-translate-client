@@ -3,7 +3,9 @@ import { escapeRegExp, rgbToHex } from "./utilities";
 export function convert_tags_to_html(data: string) {
   //console.log(data.replace(/\n/gm, "</p><p>"));
 
-  data = data.replace(/ /g, "<space>&thinsp;</space>");
+  data = data
+    .replace(/ \(disabled\)/g, "")
+    .replace(/ /g, "<space>&thinsp;</space>");
 
   const matches = [...data.matchAll(/{color=/g)];
 
@@ -27,6 +29,7 @@ export function convert_tags_to_html(data: string) {
   return (
     "<p>" +
     data
+
       .replace(/(?<!\[)\[([^\[\]]*)\]/gm, "<var>$1</var>")
       .replace(/\[\[/g, "[")
       .replace(/\]/g, "]")
@@ -49,7 +52,7 @@ export function convert_tags_to_html(data: string) {
   );
 }
 
-export function convert_html_to_tags(data: string) {
+export function convert_html_to_tags(data: string, disabled: boolean) {
   data = data
     .replace(/<space>/g, "")
     .replace(/<\/space>/g, "")
@@ -73,6 +76,8 @@ export function convert_html_to_tags(data: string) {
     "{color=$1}$2{/color}"
   );
 
+  if (disabled) data = data + " (disabled)";
+
   const r = data
     .replace(/<gender [^<]* type="male">/g, "{g}")
     .replace(/<gender [^<]* type="female">/g, "")
@@ -95,7 +100,7 @@ export function convert_html_to_tags(data: string) {
     .replace(/<\/p>/g, "")
     .replace(/<p>/g, "")
 
-    .replace(/\[\[/g, "[")
+    .replace(/\[/g, "[[")
     .replace(/\]/g, "]")
 
     .replace(/<var>/g, "[")

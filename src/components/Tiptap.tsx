@@ -17,6 +17,7 @@ interface Props {
   width: number;
   height: number;
   colors: string[] | null;
+  disabled: boolean;
   onUpdate?: (arg0: string) => void;
 }
 
@@ -57,6 +58,7 @@ const Tiptap = ({
   width,
   height,
   colors,
+  disabled,
   onUpdate,
 }: Props) => {
   const editor = useEditor(
@@ -126,6 +128,7 @@ const Tiptap = ({
               icon="transgender"
             />
             {colors &&
+              !disabled &&
               colors.map((color) => (
                 <BubbleMenuButton
                   key={color}
@@ -150,7 +153,9 @@ const Tiptap = ({
         //contentEditable
         style={{ width, height }}
         className={
-          "text-left font-philosopher text-pale text-2xl relative leading-7 border-chestnut border-2 overflow-x-auto p-2 " +
+          `text-left font-philosopher ${
+            !disabled ? "text-pale" : "text-disabled"
+          } text-2xl relative leading-7 border-chestnut border-2 overflow-x-auto p-2 ` +
           className
         }
       />

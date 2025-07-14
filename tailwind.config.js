@@ -12,6 +12,7 @@ export default {
         brightpale: "#f6d6be",
         pale: "rgb(195, 163, 138)",
         darkpale: "#ad9192",
+        disabled: "rgb(102, 103, 104)",
       },
       fontFamily: {
         philosopher: "Philosopher",

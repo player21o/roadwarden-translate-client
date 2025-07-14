@@ -53,11 +53,19 @@ const EditorCard = ({
       if (file != null && onCommit != undefined)
         onCommit(
           file.cards[index],
-          convert_html_to_tags(drafts[file.cards[index].id])
+          convert_html_to_tags(
+            drafts[file.cards[index].id],
+            file.cards[index].original.search("(disabled)") == -1
+          )
         );
     },
     { enableOnContentEditable: true, preventDefault: true }
   );
+
+  useHotkeys("ctrl+o", onJump, {
+    enableOnContentEditable: true,
+    preventDefault: true,
+  });
 
   return (
     <EditorWindow
@@ -76,7 +84,10 @@ const EditorCard = ({
                   if (onCommit != undefined)
                     onCommit(
                       file.cards[index],
-                      convert_html_to_tags(drafts[file.cards[index].id])
+                      convert_html_to_tags(
+                        drafts[file.cards[index].id],
+                        file.cards[index].original.search("(disabled)") == -1
+                      )
                     );
                 }}
                 disabled={!(file.cards[index].id in drafts) || saving}
@@ -94,7 +105,7 @@ const EditorCard = ({
           <div>
             <IconButton
               className="!text-4xl"
-              tooltip="Перейти к карточке..."
+              tooltip="Перейти к карточке... (Ctrl + O)"
               placement="bottom"
               onClick={(e) => {
                 (e.target as any).blur();
@@ -106,11 +117,19 @@ const EditorCard = ({
             </IconButton>
             <IconButton
               className="!text-4xl"
-              tooltip="Искать в файле..."
+              tooltip="Искать в файле... (Ctrl + F)"
               placement="bottom"
               onClick={onJump}
             >
               search
+            </IconButton>
+            <IconButton
+              className="!text-4xl"
+              tooltip="Вставить переменную (Ctrl + V)"
+              placement="bottom"
+              onClick={onJump}
+            >
+              segment
             </IconButton>
           </div>
           <div className="">
@@ -121,6 +140,7 @@ const EditorCard = ({
               className="float-left ml-4"
               editable={false}
               colors={[]}
+              disabled={file.cards[index].original.search("(disabled)") != -1}
             />
             <Tiptap
               width={window_width / 2 - 16 - 10}
@@ -135,6 +155,7 @@ const EditorCard = ({
                   ...new Set(file.cards[index].original.match(/#....../g)),
                 ] as string[]
               }
+              disabled={file.cards[index].original.search("(disabled)") != -1}
               editable
             />
           </div>
