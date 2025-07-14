@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="6px" height="24px" viewBox="0 0 6 24" xmlns:bx="https://boxy-svg.com">
+<svg xmlns="http://www.w3.org/2000/svg" width="4.95px" height="24px" viewBox="0 0 5 24" xmlns:bx="https://boxy-svg.com">
   <defs>
     <bx:export>
       <bx:file format="svg"/>
+      <bx:file format="svg" href="#object-0" path="circle.svg"/>
     </bx:export>
   </defs>
-  <circle cx="3.004" cy="14.077" r="1.572" style="paint-order: fill; stroke-width: 0px; fill: rgba(255, 255, 255, 0.18);"/>
+  <circle cx="2.402" cy="14.106" r="1.572" style="paint-order: fill; stroke-width: 0px; fill: rgba(255, 255, 255, 0.18);" id="object-0"/>
 </svg>

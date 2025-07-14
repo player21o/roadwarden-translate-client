@@ -3,7 +3,7 @@ import { escapeRegExp, rgbToHex } from "./utilities";
 export function convert_tags_to_html(data: string) {
   //console.log(data.replace(/\n/gm, "</p><p>"));
 
-  data = data.replace(/ /g, "<space>&nbsp;</space>");
+  data = data.replace(/ /g, "<space>&thinsp;</space>");
 
   const matches = [...data.matchAll(/{color=/g)];
 
@@ -27,8 +27,9 @@ export function convert_tags_to_html(data: string) {
   return (
     "<p>" +
     data
-      .replace(/\[/g, "<var>")
-      .replace(/\]/g, "</var>")
+      .replace(/(?<!\[)\[([^\[\]]*)\]/gm, "<var>$1</var>")
+      .replace(/\[\[/g, "[")
+      .replace(/\]/g, "]")
 
       .replace(/{\/color}/g, "</color>")
 
@@ -52,7 +53,7 @@ export function convert_html_to_tags(data: string) {
   data = data
     .replace(/<space>/g, "")
     .replace(/<\/space>/g, "")
-    .replace(/&nbsp;/g, " ");
+    .replace(/&thinsp;/g, " ");
 
   const rgb_matches = [...data.matchAll(/rgb\([^,]*, [^,]*, [^,]*\)/gm)];
 
@@ -93,6 +94,9 @@ export function convert_html_to_tags(data: string) {
     .replace(/<\/p><p>/gm, "\n")
     .replace(/<\/p>/g, "")
     .replace(/<p>/g, "")
+
+    .replace(/\[\[/g, "[")
+    .replace(/\]/g, "]")
 
     .replace(/<var>/g, "[")
     .replace(/<\/var>/g, "]");

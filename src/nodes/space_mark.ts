@@ -15,7 +15,8 @@ export const Space = Mark.create({
 
   addKeyboardShortcuts() {
     return {
-      Space: () => this.editor.commands.insertContent("<space>&nbsp;</space>"),
+      Space: () =>
+        this.editor.commands.insertContent("<space>&thinsp;</space>"),
     };
   },
 
