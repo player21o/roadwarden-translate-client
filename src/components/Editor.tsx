@@ -107,24 +107,38 @@ const Editor = () => {
           setDrafts={setDrafts}
           setFiles={setFiles}
           setSavingCards={setSavingCards}
-          setCardIndex={(index: number, past: boolean) => {
-            if (past)
+          setCardIndex={(index: number, past: boolean | "clear") => {
+            if (past == true) {
               dispatchWindows({
                 type: "set_file_window",
-                window_index: windows.active,
                 window: {
+                  index,
                   past_cards: [
                     ...(windows.windows[windows.active] as FileWindow)
                       .past_cards,
                     (windows.windows[windows.active] as FileWindow).index,
                   ],
                 },
+                window_index: windows.active,
               });
-            dispatchWindows({
-              type: "set_file_window",
-              window: { index },
-              window_index: windows.active,
-            });
+            } else if (past == false) {
+              dispatchWindows({
+                type: "set_file_window",
+                window: {
+                  index,
+                },
+                window_index: windows.active,
+              });
+            } else if (past == "clear") {
+              dispatchWindows({
+                type: "set_file_window",
+                window: {
+                  index,
+                  past_cards: [],
+                },
+                window_index: windows.active,
+              });
+            }
           }}
           window={windows.windows[windows.active] as FileWindow}
         />

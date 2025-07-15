@@ -11,7 +11,7 @@ import EditorCardJump from "./EditorCardJump";
 
 interface Props {
   window: FileWindow;
-  setCardIndex: (index: number, past: boolean) => void;
+  setCardIndex: (index: number, past: boolean | "clear") => void;
   files: Files;
   setFiles: (arg0: Files) => void;
   drafts: Drafts;
@@ -55,8 +55,13 @@ const EditorCardController = ({
     }
   };
 
-  const set_card_index = (index: number, past?: boolean) =>
-    setCardIndex(index, past != undefined ? past : false);
+  const set_card_index = (index: number, past?: boolean | "clear") => {
+    if (past == undefined) {
+      setCardIndex(index, false);
+    } else {
+      setCardIndex(index, past);
+    }
+  };
 
   useHotkeys("ctrl+arrowdown", () => go_up_down_card(1), {
     enableOnContentEditable: true,
@@ -71,7 +76,7 @@ const EditorCardController = ({
       go_to_card(
         ind,
         (new_ind) => {
-          set_card_index(new_ind);
+          set_card_index(new_ind, "clear");
         },
         true
       );
@@ -84,6 +89,19 @@ const EditorCardController = ({
 
   return (
     <EditorCard
+      revertToHistory={(ind: number) => {
+        go_to_card(
+          window.past_cards[ind],
+          (new_ind) => {
+            set_card_index(
+              new_ind,
+              window.past_cards.indexOf(window.index) == -1
+            );
+          },
+          false
+        );
+      }}
+      history={window.past_cards}
       goToCard={go_up_down_card}
       index={window.index}
       file={useFetchFile(window.file, files, setFiles)}
@@ -120,7 +138,7 @@ const EditorCardController = ({
               go_to_card(
                 ind,
                 (new_ind) => {
-                  set_card_index(new_ind);
+                  set_card_index(new_ind, true);
                 },
                 false
               );

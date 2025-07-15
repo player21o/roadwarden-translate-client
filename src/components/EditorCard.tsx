@@ -20,10 +20,12 @@ interface Props {
   allowed: boolean;
   saving: boolean;
   children?: ReactNode;
+  history: number[];
   onChange?: (arg0: Card, arg1: string) => void;
   onCommit?: (arg0: Card, arg1: string) => void;
   onJump: () => void;
   goToCard: (ind: number) => void;
+  revertToHistory: (ind: number) => void;
 }
 
 const EditorCard = ({
@@ -35,8 +37,10 @@ const EditorCard = ({
   allowed,
   saving,
   children,
+  history,
   onJump,
   goToCard,
+  revertToHistory,
 }: Props) => {
   const { window_width, window_height, screen_width, screen_height } =
     useContext(EditorWindowSizeContext);
@@ -153,43 +157,66 @@ const EditorCard = ({
             className="text-xl flex justify-center items-center"
             style={{ height: "7%" }}
           >
-            <p className="mr-2" style={{ visibility: "hidden" }}>
-              {"<<назад к к. 100"}
-            </p>
-            <IconButton
-              className="!text-4xl !m-0"
-              tooltip="Предыдущая карточка (Ctrl + ↑)"
-              placement="bottom"
-              btnClassName="!m-0"
-              onClick={() => goToCard(-1)}
-            >
-              move_up
-            </IconButton>
-            <IconButton
-              className="!text-4xl !m-0"
-              tooltip="Перейти к карточке... (Ctrl + O)"
-              placement="bottom"
-              btnClassName="!m-0"
-              onClick={(e) => {
-                (e.target as any).blur();
-                (e.currentTarget as any).blur();
-                onJump();
-              }}
-            >
-              swap_horiz
-            </IconButton>
-            <IconButton
-              className="!text-4xl !m-0"
-              tooltip="Следующая карточка (Ctrl + ↓)"
-              placement="bottom"
-              btnClassName="!m-0"
-              onClick={() => goToCard(1)}
-            >
-              move_down
-            </IconButton>
-            <p className="ml-2" style={{ visibility: "hidden" }}>
-              {"вперед к к. 100>>"}
-            </p>
+            <div className="relative flex">
+              {history.length > 0 && history.indexOf(index) != 0 && (
+                <p
+                  className="w-max mr-2 cursor-pointer absolute right-full top-1/2 -translate-y-1/2 pr-2 whitespace-nowrap"
+                  onClick={() =>
+                    revertToHistory(
+                      history.indexOf(index) == -1
+                        ? history.length - 1
+                        : history.indexOf(index) - 1
+                    )
+                  }
+                >
+                  {`<<назад к к. ${
+                    history.indexOf(index) == -1
+                      ? history[history.length - 1] + 1
+                      : history[history.indexOf(index) - 1] + 1
+                  }`}
+                </p>
+              )}
+              <IconButton
+                className="!text-4xl !m-0"
+                tooltip="Предыдущая карточка (Ctrl + ↑)"
+                placement="bottom"
+                btnClassName="!m-0"
+                onClick={() => goToCard(-1)}
+              >
+                move_up
+              </IconButton>
+              <IconButton
+                className="!text-4xl !m-0"
+                tooltip="Перейти к карточке... (Ctrl + O)"
+                placement="bottom"
+                btnClassName="!m-0"
+                onClick={(e) => {
+                  (e.target as any).blur();
+                  (e.currentTarget as any).blur();
+                  onJump();
+                }}
+              >
+                swap_horiz
+              </IconButton>
+              <IconButton
+                className="!text-4xl !m-0"
+                tooltip="Следующая карточка (Ctrl + ↓)"
+                placement="bottom"
+                btnClassName="!m-0"
+                onClick={() => goToCard(1)}
+              >
+                move_down
+              </IconButton>
+              {history.indexOf(index) != -1 &&
+                history.indexOf(index) < history.length - 1 && (
+                  <p
+                    className="w-max ml-2 absolute left-full top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => revertToHistory(history.indexOf(index) + 1)}
+                  >
+                    {`вперед к к. ${history[history.indexOf(index) + 1] + 1}>>`}
+                  </p>
+                )}
+            </div>
           </div>
         </>
       )}
