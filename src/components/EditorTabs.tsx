@@ -47,7 +47,7 @@ const EditorTabs = ({
           border_thickness.current,
         left: screen_width / 2 - window_width / 2 + 10,
       }}
-      className="absolute flex flex-row justify-start items-center gap-2 overflow-auto"
+      className="absolute flex flex-row justify-start items-center gap-2 overflow-auto flex-wrap"
     >
       {windows.windows.map((window, i) => (
         <EditorTab

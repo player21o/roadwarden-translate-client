@@ -63,11 +63,11 @@ const EditorCardController = ({
     }
   };
 
-  useHotkeys("ctrl+arrowdown", () => go_up_down_card(1), {
+  useHotkeys("mod+arrowdown", () => go_up_down_card(1), {
     enableOnContentEditable: true,
   });
 
-  useHotkeys("ctrl+arrowup", () => go_up_down_card(-1), {
+  useHotkeys("mod+arrowup", () => go_up_down_card(-1), {
     enableOnContentEditable: true,
   });
 
@@ -82,7 +82,7 @@ const EditorCardController = ({
       );
   };
 
-  useHotkeys("ctrl+j", (event) => {
+  useHotkeys("mod+j", (event) => {
     toggle_jump();
     event.preventDefault();
   });

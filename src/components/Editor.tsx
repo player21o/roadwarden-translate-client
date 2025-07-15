@@ -48,16 +48,9 @@ const Editor = () => {
   return windows.windows.length == 0 ? (
     <IconButton
       onClick={() =>
-        //setWindows({
-        //  ...windows,
-        //  windows: [
-        //    ...windows.windows,
-        //    { type: "file", file: "prologue", index: 0 },
-        //  ],
-        //})
         dispatchWindows({
           type: "add",
-          window: { type: "file", file: "prologue", index: 0, past_cards: [] },
+          window: { type: "file", file: "shortcut", index: 0, past_cards: [] },
         })
       }
     >
@@ -75,10 +68,6 @@ const Editor = () => {
       <EditorTabs
         windows={windows}
         onNewWindow={() =>
-          //setWindows({
-          //  ...windows,
-          //  cards: [...windows.cards, { file: "prologue", index: 0 }],
-          //})
           dispatchWindows({
             type: "add",
             window: {
@@ -89,14 +78,7 @@ const Editor = () => {
             },
           })
         }
-        onCloseWindow={(index) =>
-          //setWindows({
-          //  ...windows,
-          ////  cards: windows.cards.filter((_, i) => i != index),
-          //  active: windows.active > 0 ? windows.active - 1 : 0,
-          //})
-          dispatchWindows({ type: "remove", index })
-        }
+        onCloseWindow={(index) => dispatchWindows({ type: "remove", index })}
         onFocusWindow={(index) => dispatchWindows({ type: "focus", index })}
       />
       {windows.windows[windows.active].type == "file" ? (

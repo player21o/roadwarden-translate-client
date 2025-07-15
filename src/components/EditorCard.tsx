@@ -57,7 +57,7 @@ const EditorCard = ({
   }, [index, file]);
 
   useHotkeys(
-    "ctrl+s",
+    "mod+s",
     (_e) => {
       if (file != null && onCommit != undefined)
         onCommit(
@@ -71,7 +71,7 @@ const EditorCard = ({
     { enableOnContentEditable: true, preventDefault: true }
   );
 
-  useHotkeys("ctrl+o", onJump, {
+  useHotkeys("mod+o", onJump, {
     enableOnContentEditable: true,
     preventDefault: true,
   });
@@ -281,7 +281,11 @@ const EditorCard = ({
             className="absolute right-0"
           >
             <div
-              style={{ width: "10px", height: "10px" }}
+              style={{
+                width: "10px",
+                height: "10px",
+                top: (window_height - 14) * (index / file.visible_cards.length),
+              }}
               className="bg-chestnut hover:bg-brightpale absolute z-50"
               ref={slider}
             ></div>
