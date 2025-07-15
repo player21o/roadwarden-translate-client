@@ -23,6 +23,7 @@ interface Props {
   onChange?: (arg0: Card, arg1: string) => void;
   onCommit?: (arg0: Card, arg1: string) => void;
   onJump: () => void;
+  goToCard: (ind: number) => void;
 }
 
 const EditorCard = ({
@@ -35,6 +36,7 @@ const EditorCard = ({
   saving,
   children,
   onJump,
+  goToCard,
 }: Props) => {
   const { window_width, window_height, screen_width, screen_height } =
     useContext(EditorWindowSizeContext);
@@ -105,18 +107,6 @@ const EditorCard = ({
           <div>
             <IconButton
               className="!text-4xl"
-              tooltip="Перейти к карточке... (Ctrl + O)"
-              placement="bottom"
-              onClick={(e) => {
-                (e.target as any).blur();
-                (e.currentTarget as any).blur();
-                onJump();
-              }}
-            >
-              swap_horiz
-            </IconButton>
-            <IconButton
-              className="!text-4xl"
               tooltip="Искать в файле... (Ctrl + F)"
               placement="bottom"
               onClick={onJump}
@@ -135,7 +125,7 @@ const EditorCard = ({
           <div className="">
             <Tiptap
               width={window_width / 2 - 16 - 10}
-              height={window_height - 130}
+              height={window_height - 160}
               content={convert_tags_to_html(file.cards[index].original)}
               className="float-left ml-4"
               editable={false}
@@ -144,7 +134,7 @@ const EditorCard = ({
             />
             <Tiptap
               width={window_width / 2 - 16 - 10}
-              height={window_height - 130}
+              height={window_height - 160}
               content={translation}
               className="float-right mr-4"
               onUpdate={(content) => {
@@ -158,6 +148,48 @@ const EditorCard = ({
               disabled={file.cards[index].original.search("(disabled)") != -1}
               editable
             />
+          </div>
+          <div
+            className="text-xl flex justify-center items-center"
+            style={{ height: "7%" }}
+          >
+            <p className="mr-2" style={{ visibility: "hidden" }}>
+              {"<<назад к к. 100"}
+            </p>
+            <IconButton
+              className="!text-4xl !m-0"
+              tooltip="Предыдущая карточка (Ctrl + ↑)"
+              placement="bottom"
+              btnClassName="!m-0"
+              onClick={() => goToCard(-1)}
+            >
+              move_up
+            </IconButton>
+            <IconButton
+              className="!text-4xl !m-0"
+              tooltip="Перейти к карточке... (Ctrl + O)"
+              placement="bottom"
+              btnClassName="!m-0"
+              onClick={(e) => {
+                (e.target as any).blur();
+                (e.currentTarget as any).blur();
+                onJump();
+              }}
+            >
+              swap_horiz
+            </IconButton>
+            <IconButton
+              className="!text-4xl !m-0"
+              tooltip="Следующая карточка (Ctrl + ↓)"
+              placement="bottom"
+              btnClassName="!m-0"
+              onClick={() => goToCard(1)}
+            >
+              move_down
+            </IconButton>
+            <p className="ml-2" style={{ visibility: "hidden" }}>
+              {"вперед к к. 100>>"}
+            </p>
           </div>
         </>
       )}

@@ -11,6 +11,7 @@ export interface FileWindow {
   type: "file";
   file: string;
   index: number;
+  past_cards: number[];
 }
 
 export interface SearchWindow {

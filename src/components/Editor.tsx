@@ -28,7 +28,7 @@ const Editor = () => {
     get_or_default("windows", {
       dict: false,
       code: false,
-      windows: [{ type: "file", file: "prologue", index: 0 }],
+      windows: [{ type: "file", file: "prologue", index: 0, past_cards: [] }],
       active: 0,
     })
   );
@@ -57,7 +57,7 @@ const Editor = () => {
         //})
         dispatchWindows({
           type: "add",
-          window: { type: "file", file: "prologue", index: 0 },
+          window: { type: "file", file: "prologue", index: 0, past_cards: [] },
         })
       }
     >
@@ -81,7 +81,12 @@ const Editor = () => {
           //})
           dispatchWindows({
             type: "add",
-            window: { type: "file", file: "prologue", index: 0 },
+            window: {
+              type: "file",
+              file: "prologue",
+              index: 0,
+              past_cards: [],
+            },
           })
         }
         onCloseWindow={(index) =>
@@ -102,13 +107,25 @@ const Editor = () => {
           setDrafts={setDrafts}
           setFiles={setFiles}
           setSavingCards={setSavingCards}
-          setCardIndex={(index: number) =>
+          setCardIndex={(index: number, past: boolean) => {
+            if (past)
+              dispatchWindows({
+                type: "set_file_window",
+                window_index: windows.active,
+                window: {
+                  past_cards: [
+                    ...(windows.windows[windows.active] as FileWindow)
+                      .past_cards,
+                    (windows.windows[windows.active] as FileWindow).index,
+                  ],
+                },
+              });
             dispatchWindows({
-              type: "set_file_index",
-              file_index: index,
+              type: "set_file_window",
+              window: { index },
               window_index: windows.active,
-            })
-          }
+            });
+          }}
           window={windows.windows[windows.active] as FileWindow}
         />
       ) : null}

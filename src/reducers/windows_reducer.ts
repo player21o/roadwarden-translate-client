@@ -1,4 +1,4 @@
-import { Window, Windows } from "../utils/localstorage";
+import { FileWindow, Window, Windows } from "../utils/localstorage";
 
 export type Action =
   | {
@@ -7,7 +7,11 @@ export type Action =
     }
   | { type: "remove"; index: number }
   | { type: "focus"; index: number }
-  | { type: "set_file_index"; window_index: number; file_index: number };
+  | {
+      type: "set_file_window";
+      window_index: number;
+      window: Partial<FileWindow>;
+    };
 
 export default function windows_reducer(windows: Windows, action: Action) {
   switch (action.type) {
@@ -24,12 +28,12 @@ export default function windows_reducer(windows: Windows, action: Action) {
     case "focus": {
       return { ...windows, active: action.index };
     }
-    case "set_file_index": {
+    case "set_file_window": {
       return {
         ...windows,
         windows: windows.windows.map((w, i) => {
           if (i == action.window_index && w.type == "file") {
-            return { ...w, index: action.file_index };
+            return { ...w, ...action.window };
           } else {
             return w;
           }

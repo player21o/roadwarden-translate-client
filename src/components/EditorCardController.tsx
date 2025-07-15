@@ -11,7 +11,7 @@ import EditorCardJump from "./EditorCardJump";
 
 interface Props {
   window: FileWindow;
-  setCardIndex: (index: number) => void;
+  setCardIndex: (index: number, past: boolean) => void;
   files: Files;
   setFiles: (arg0: Files) => void;
   drafts: Drafts;
@@ -55,32 +55,27 @@ const EditorCardController = ({
     }
   };
 
-  const set_card_index = (index: number) => setCardIndex(index);
-  useHotkeys(
-    "ctrl+arrowdown",
-    () =>
-      !jump &&
-      go_to_card(
-        1,
-        (new_ind) => {
-          set_card_index(new_ind);
-        },
-        true
-      )
-  );
+  const set_card_index = (index: number, past?: boolean) =>
+    setCardIndex(index, past != undefined ? past : false);
 
-  useHotkeys(
-    "ctrl+arrowup",
-    () =>
-      !jump &&
+  useHotkeys("ctrl+arrowdown", () => go_up_down_card(1), {
+    enableOnContentEditable: true,
+  });
+
+  useHotkeys("ctrl+arrowup", () => go_up_down_card(-1), {
+    enableOnContentEditable: true,
+  });
+
+  const go_up_down_card = (ind: number) => {
+    !jump &&
       go_to_card(
-        -1,
+        ind,
         (new_ind) => {
           set_card_index(new_ind);
         },
         true
-      )
-  );
+      );
+  };
 
   useHotkeys("ctrl+j", (event) => {
     toggle_jump();
@@ -89,6 +84,7 @@ const EditorCardController = ({
 
   return (
     <EditorCard
+      goToCard={go_up_down_card}
       index={window.index}
       file={useFetchFile(window.file, files, setFiles)}
       drafts={drafts}
