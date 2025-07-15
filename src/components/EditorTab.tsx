@@ -74,6 +74,11 @@ interface Props {
   onCloseWindow: (index: number) => void;
 }
 
+const icons: { [A in Window["type"]]: string } = {
+  file: "translate",
+  search: "search",
+};
+
 export default memo(
   function EditorTab({
     active_window,
@@ -107,7 +112,14 @@ export default memo(
           </IconButton>
         )}
         <p>
-          {window.type == "file" ? `${window.file} - ${window.index + 1}` : "a"}
+          <span className="material-icons align-bottom mr-1">
+            {icons[window.type]}
+          </span>
+          {window.type == "file"
+            ? `${window.file} - ${window.index + 1}`
+            : window.type == "search"
+            ? "Поиск"
+            : "a"}
         </p>
       </div>
     );
@@ -117,7 +129,9 @@ export default memo(
       case "file": {
         return (
           prev.window.file == (next.window as FileWindow).file &&
-          prev.window.index == (next.window as FileWindow).index
+          prev.window.index == (next.window as FileWindow).index &&
+          prev.active_window == next.active_window &&
+          prev.hovered == next.hovered
         );
       }
       case "search": {
