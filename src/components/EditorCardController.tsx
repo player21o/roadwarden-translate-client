@@ -89,6 +89,15 @@ const EditorCardController = ({
 
   return (
     <EditorCard
+      onSlider={(ind: number) =>
+        go_to_card(
+          ind,
+          (new_ind) => {
+            set_card_index(new_ind, false);
+          },
+          false
+        )
+      }
       revertToHistory={(ind: number) => {
         go_to_card(
           window.past_cards[ind],

@@ -3,7 +3,7 @@ import Tiptap from "./Tiptap";
 import { File } from "../hooks/FetchFile";
 import { Card } from "../protocol/packets";
 import { Drafts } from "../utils/localstorage";
-import { ReactNode, useContext, useMemo } from "react";
+import { ReactNode, useContext, useEffect, useMemo, useRef } from "react";
 import {
   convert_html_to_tags,
   convert_tags_to_html,
@@ -12,6 +12,7 @@ import Spinner from "./Spinner";
 import IconButton from "./IconButton";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 import { useHotkeys } from "react-hotkeys-hook";
+import { clamp_number } from "../utils/utilities";
 
 interface Props {
   index: number;
@@ -26,6 +27,7 @@ interface Props {
   onJump: () => void;
   goToCard: (ind: number) => void;
   revertToHistory: (ind: number) => void;
+  onSlider: (ind: number) => void;
 }
 
 const EditorCard = ({
@@ -41,6 +43,7 @@ const EditorCard = ({
   onJump,
   goToCard,
   revertToHistory,
+  onSlider,
 }: Props) => {
   const { window_width, window_height, screen_width, screen_height } =
     useContext(EditorWindowSizeContext);
@@ -72,6 +75,61 @@ const EditorCard = ({
     enableOnContentEditable: true,
     preventDefault: true,
   });
+
+  const slider = useRef(null);
+
+  function dragElement(elmnt: HTMLElement) {
+    var pos1 = 0,
+      pos2 = 0,
+      pos3 = 0,
+      pos4 = 0;
+    elmnt.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e: MouseEvent) {
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e: MouseEvent) {
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      const top = clamp_number(elmnt.offsetTop - pos2, 0, window_height - 14);
+      elmnt.style.top = top + "px";
+
+      const card_index = Math.round(
+        file!.visible_cards.length * (top / (window_height - 14))
+      );
+
+      onSlider(card_index);
+      //elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+    }
+
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+
+  useEffect(() => {
+    if (slider.current != null)
+      dragElement(slider.current as any as HTMLElement);
+
+    return () => {
+      if (slider.current != null)
+        (slider.current as any).onmousedown = undefined;
+    };
+  }, [slider.current]);
 
   return (
     <EditorWindow
@@ -217,6 +275,16 @@ const EditorCard = ({
                   </p>
                 )}
             </div>
+          </div>
+          <div
+            style={{ height: "calc(100% - 10px)", width: "10px" }}
+            className="absolute right-0"
+          >
+            <div
+              style={{ width: "10px", height: "10px" }}
+              className="bg-chestnut hover:bg-brightpale absolute z-50"
+              ref={slider}
+            ></div>
           </div>
         </>
       )}
