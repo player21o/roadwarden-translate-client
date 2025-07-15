@@ -281,6 +281,7 @@ const EditorCard = ({
             className="absolute right-0"
           >
             <div
+              key={"slider"}
               style={{
                 width: "10px",
                 height: "10px",
@@ -288,7 +289,34 @@ const EditorCard = ({
               }}
               className="bg-chestnut hover:bg-brightpale absolute z-50"
               ref={slider}
-            ></div>
+            />
+            {Object.keys(drafts).map(
+              (id) =>
+                id in file!.card_ids && (
+                  <div
+                    key={id}
+                    onClick={() =>
+                      onSlider(
+                        file.visible_cards.indexOf(
+                          file.card_ids[id as any as number]
+                        )
+                      )
+                    }
+                    style={{
+                      width: "10px",
+                      height: "5px",
+                      cursor: "pointer",
+                      top:
+                        (window_height - 14) *
+                        (file.visible_cards.indexOf(
+                          file.card_ids[id as any as number]
+                        ) /
+                          file.visible_cards.length),
+                    }}
+                    className="bg-red-500 absolute z-40"
+                  />
+                )
+            )}
           </div>
         </>
       )}
