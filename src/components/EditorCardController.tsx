@@ -1,6 +1,6 @@
 import { useHotkeys } from "react-hotkeys-hook";
 import useFetchFile, { Files } from "../hooks/FetchFile";
-import { Drafts, Windows } from "../utils/localstorage";
+import { Drafts, FileWindow } from "../utils/localstorage";
 import EditorCard from "./EditorCard";
 import commit from "../utils/commit";
 import { useContext, useState } from "react";
@@ -10,8 +10,8 @@ import { UserPermission } from "../protocol/packets";
 import EditorCardJump from "./EditorCardJump";
 
 interface Props {
-  windows: Windows;
-  setWindows: (arg0: Windows) => void;
+  window: FileWindow;
+  setCardIndex: (index: number) => void;
   files: Files;
   setFiles: (arg0: Files) => void;
   drafts: Drafts;
@@ -21,8 +21,8 @@ interface Props {
 }
 
 const EditorCardController = ({
-  windows,
-  setWindows,
+  window,
+  setCardIndex,
   files,
   setFiles,
   drafts,
@@ -32,8 +32,6 @@ const EditorCardController = ({
 }: Props) => {
   const { user } = useContext(UserContext);
   const me = useGetUser(user.id);
-
-  const window = windows.cards[windows.active];
 
   const [jump, setJump] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -57,19 +55,7 @@ const EditorCardController = ({
     }
   };
 
-  const set_card_index = (index: number) => {
-    setWindows({
-      ...windows,
-      cards: windows.cards.map((w, i) => {
-        if (i == windows.active) {
-          return { ...w, index: index };
-        } else {
-          return w;
-        }
-      }),
-    });
-  };
-
+  const set_card_index = (index: number) => setCardIndex(index);
   useHotkeys(
     "ctrl+arrowdown",
     () =>

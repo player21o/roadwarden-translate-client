@@ -49,14 +49,13 @@ const EditorTabs = ({
       }}
       className="absolute flex flex-row justify-start items-center gap-2 overflow-auto"
     >
-      {windows.cards.map((window, i) => (
+      {windows.windows.map((window, i) => (
         <EditorTab
           active_window={windows.active == i}
-          file_name={window.file}
           hovered={hoveredWindow == i}
-          card_index={window.index}
+          window={window}
           window_index={i}
-          key={window.file + window.index + i}
+          key={window.type + i}
           onFocusWindow={onFocusWindow}
           setHoveredWindow={setHoveredWindow}
           onCloseWindow={onCloseWindow}

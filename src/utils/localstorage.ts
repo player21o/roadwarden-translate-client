@@ -1,9 +1,27 @@
 export type Windows = {
   dict: boolean;
   code: boolean;
-  cards: { file: string; index: number }[];
+  windows: Window[];
   active: number;
 };
+
+export type Window = FileWindow | SearchWindow;
+
+export interface FileWindow {
+  type: "file";
+  file: string;
+  index: number;
+}
+
+export interface SearchWindow {
+  type: "search";
+  query: string;
+  files: string[];
+  ignore_case: boolean;
+  search_translated: boolean;
+  search_original: boolean;
+  to_replace: string;
+}
 
 export type Drafts = { [card: number]: string };
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Files } from "../hooks/FetchFile";
-import { Drafts, get_or_default, lc, Windows } from "../utils/localstorage";
+import { Drafts, FileWindow, get_or_default, lc } from "../utils/localstorage";
 import useHandleUpdates from "../hooks/HandleUpdates";
 import EditorCardController from "./EditorCardController";
 import EditorTabs from "./EditorTabs";
@@ -8,6 +8,8 @@ import useWindowDimensions from "../hooks/WindowDimensions";
 import { clamp_number } from "../utils/utilities";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 import IconButton from "./IconButton";
+import { useReducer } from "react";
+import windows_reducer, { Action } from "../reducers/windows_reducer";
 
 const Editor = () => {
   const { width, height } = useWindowDimensions();
@@ -21,20 +23,21 @@ const Editor = () => {
 
   useHandleUpdates(files, setFiles);
 
-  const [windows, setWindowsState] = useState(
+  const [windows, dispatchWindowsState] = useReducer(
+    windows_reducer,
     get_or_default("windows", {
       dict: false,
       code: false,
-      cards: [{ file: "prologue", index: 0 }],
+      windows: [{ type: "file", file: "prologue", index: 0 }],
       active: 0,
     })
   );
 
   const [drafts, setDraftsState] = useState(get_or_default("drafts", {}));
 
-  const setWindows = (data: Windows) => {
-    setWindowsState(data);
-    lc.set("windows", data);
+  const dispatchWindows = (action: Action) => {
+    dispatchWindowsState(action);
+    lc.set("windows", windows_reducer(windows, action));
   };
 
   const setDrafts = (data: Drafts) => {
@@ -42,12 +45,19 @@ const Editor = () => {
     lc.set("drafts", data);
   };
 
-  return windows.cards.length == 0 ? (
+  return windows.windows.length == 0 ? (
     <IconButton
       onClick={() =>
-        setWindows({
-          ...windows,
-          cards: [...windows.cards, { file: "prologue", index: 0 }],
+        //setWindows({
+        //  ...windows,
+        //  windows: [
+        //    ...windows.windows,
+        //    { type: "file", file: "prologue", index: 0 },
+        //  ],
+        //})
+        dispatchWindows({
+          type: "add",
+          window: { type: "file", file: "prologue", index: 0 },
         })
       }
     >
@@ -65,30 +75,43 @@ const Editor = () => {
       <EditorTabs
         windows={windows}
         onNewWindow={() =>
-          setWindows({
-            ...windows,
-            cards: [...windows.cards, { file: "prologue", index: 0 }],
+          //setWindows({
+          //  ...windows,
+          //  cards: [...windows.cards, { file: "prologue", index: 0 }],
+          //})
+          dispatchWindows({
+            type: "add",
+            window: { type: "file", file: "prologue", index: 0 },
           })
         }
         onCloseWindow={(index) =>
-          setWindows({
-            ...windows,
-            cards: windows.cards.filter((_, i) => i != index),
-            active: windows.active > 0 ? windows.active - 1 : 0,
-          })
+          //setWindows({
+          //  ...windows,
+          ////  cards: windows.cards.filter((_, i) => i != index),
+          //  active: windows.active > 0 ? windows.active - 1 : 0,
+          //})
+          dispatchWindows({ type: "remove", index })
         }
-        onFocusWindow={(i) => setWindows({ ...windows, active: i })}
+        onFocusWindow={(index) => dispatchWindows({ type: "focus", index })}
       />
-      <EditorCardController
-        drafts={drafts}
-        files={files}
-        savingCards={savingCards}
-        setDrafts={setDrafts}
-        setFiles={setFiles}
-        setSavingCards={setSavingCards}
-        setWindows={setWindows}
-        windows={windows}
-      />
+      {windows.windows[windows.active].type == "file" ? (
+        <EditorCardController
+          drafts={drafts}
+          files={files}
+          savingCards={savingCards}
+          setDrafts={setDrafts}
+          setFiles={setFiles}
+          setSavingCards={setSavingCards}
+          setCardIndex={(index: number) =>
+            dispatchWindows({
+              type: "set_file_index",
+              file_index: index,
+              window_index: windows.active,
+            })
+          }
+          window={windows.windows[windows.active] as FileWindow}
+        />
+      ) : null}
     </EditorWindowSizeContext.Provider>
   );
 };
