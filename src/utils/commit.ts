@@ -17,6 +17,8 @@ const commit = ({
 }) => {
   setCache([...cache, card_id]);
 
+  console.log("commiting...");
+
   prot
     .send("commit", { card_id: card_id, content: content })
     .then(({ status }) => {

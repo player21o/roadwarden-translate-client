@@ -61,10 +61,10 @@ const EditorCard = ({
     (_e) => {
       if (file != null && onCommit != undefined)
         onCommit(
-          file.cards[index],
+          file.visible_cards[index],
           convert_html_to_tags(
-            drafts[file.cards[index].id],
-            file.cards[index].original.search("(disabled)") == -1
+            drafts[file.visible_cards[index].id],
+            file.visible_cards[index].original.search("(disabled)") == -1
           )
         );
     },
