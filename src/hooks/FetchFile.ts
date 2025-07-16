@@ -34,9 +34,7 @@ const useFetchFile = (
             visible_cards: sorted.filter((c) => !c.hidden),
             name: name,
             original: p.original_file,
-            card_ids: Object.fromEntries(
-              sorted.map((s, i) => [s.id, { ...s }])
-            ),
+            card_ids: Object.fromEntries(sorted.map((s) => [s.id, s])),
           };
 
           setFile(return_file);

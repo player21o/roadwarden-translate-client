@@ -129,7 +129,7 @@ const EditorCard = ({
       if (slider.current != null)
         (slider.current as any).onmousedown = undefined;
     };
-  }, [slider.current]);
+  }, [slider.current, file]);
 
   return (
     <EditorWindow
@@ -147,14 +147,16 @@ const EditorCard = ({
                 onClick={() => {
                   if (onCommit != undefined)
                     onCommit(
-                      file.cards[index],
+                      file.visible_cards[index],
                       convert_html_to_tags(
-                        drafts[file.cards[index].id],
-                        file.cards[index].original.search("(disabled)") == -1
+                        drafts[file.visible_cards[index].id],
+                        file.visible_cards[index].original.search(
+                          "(disabled)"
+                        ) == -1
                       )
                     );
                 }}
-                disabled={!(file.cards[index].id in drafts) || saving}
+                disabled={!(file.visible_cards[index].id in drafts) || saving}
                 className="bg-blue-600 hover:bg-blue-500 text-white disabled:bg-gray-600 w-32 h-14 absolute right-0 enabled:cursor-pointer"
               >
                 {saving ? <Spinner /> : <h2 className="relative">Сохранить</h2>}
@@ -200,7 +202,8 @@ const EditorCard = ({
               content={translation}
               className="float-right mr-4"
               onUpdate={(content) => {
-                if (onChange != undefined) onChange(file.cards[index], content);
+                if (onChange != undefined)
+                  onChange(file.visible_cards[index], content);
               }}
               colors={
                 [
@@ -290,33 +293,37 @@ const EditorCard = ({
               className="bg-chestnut hover:bg-brightpale absolute z-50"
               ref={slider}
             />
-            {Object.keys(drafts).map(
-              (id) =>
-                id in file!.card_ids && (
-                  <div
-                    key={id}
-                    onClick={() =>
-                      onSlider(
-                        file.visible_cards.indexOf(
-                          file.card_ids[id as any as number]
-                        )
-                      )
-                    }
-                    style={{
-                      width: "10px",
-                      height: "5px",
-                      cursor: "pointer",
-                      top:
-                        (window_height - 14) *
-                        (file.visible_cards.indexOf(
-                          file.card_ids[id as any as number]
-                        ) /
-                          file.visible_cards.length),
-                    }}
-                    className="bg-red-500 absolute z-40"
-                  />
-                )
-            )}
+            {Object.keys(drafts).map((idString) => {
+              const cardId = parseInt(idString);
+
+              if (!file!.card_ids[cardId]) {
+                return null;
+              }
+
+              const visibleIndex = file.visible_cards.findIndex(
+                (c) => c.id === cardId
+              );
+
+              if (visibleIndex === -1) {
+                return null;
+              }
+
+              return (
+                <div
+                  key={cardId}
+                  onClick={() => onSlider(visibleIndex)}
+                  style={{
+                    width: "10px",
+                    height: "5px",
+                    cursor: "pointer",
+                    top:
+                      (window_height - 14) *
+                      (visibleIndex / file.visible_cards.length),
+                  }}
+                  className="bg-red-500 absolute z-40"
+                />
+              );
+            })}
           </div>
         </>
       )}
