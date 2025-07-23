@@ -46,6 +46,11 @@ const Editor = () => {
     lc.set("drafts", data);
   };
 
+  const activeWindow = windows.windows[windows.active];
+  const activeFileName =
+    activeWindow?.type === "file" ? (activeWindow as FileWindow).file : null;
+  const file = useFetchFile(activeFileName, files, setFiles);
+
   return windows.windows.length == 0 ? (
     <IconButton
       onClick={() =>
@@ -82,58 +87,50 @@ const Editor = () => {
         onCloseWindow={(index) => dispatchWindows({ type: "remove", index })}
         onFocusWindow={(index) => dispatchWindows({ type: "focus", index })}
       />
-      {(() => {
-        switch (windows.windows[windows.active].type) {
-          case "file":
-            const file = useFetchFile(
-              (windows.windows[windows.active] as FileWindow).file,
-              files,
-              setFiles
-            );
-            const index = (windows.windows[windows.active] as FileWindow).index;
-            return (
-              <EditorCard
-                drafts={drafts}
-                file={file}
-                cardIndex={index}
-                pastCards={
-                  (windows.windows[windows.active] as FileWindow).past_cards
-                }
-                setDraft={(draft) =>
-                  setDrafts({
-                    ...drafts,
-                    [file!.visible_cards[index].id]: draft,
-                  })
-                }
-                setCardIndex={(ind) => {
-                  const i =
-                    ind < 0
-                      ? 0
-                      : ind > file!.visible_cards.length - 1
-                      ? file!.visible_cards.length - 1
-                      : ind;
+      {activeWindow?.type === "file" && (
+        <EditorCard
+          key={windows.windows[windows.active].type + windows.active}
+          drafts={drafts}
+          file={useFetchFile(
+            (windows.windows[windows.active] as FileWindow).file,
+            files,
+            setFiles
+          )}
+          cardIndex={(windows.windows[windows.active] as FileWindow).index}
+          pastCards={(windows.windows[windows.active] as FileWindow).past_cards}
+          setDraft={(id, draft) =>
+            setDrafts({
+              ...drafts,
+              [id]: draft,
+            })
+          }
+          setCardIndexNormal={(ind, file) => {
+            if (file == null) return;
 
-                  dispatchWindows({
-                    type: "set_file_window",
-                    window_index: windows.active,
-                    window: { index: i },
-                  });
-                }}
-                onCommit={(content, cb) => {
-                  commit({
-                    cache: [savingCards, setSavingCards],
-                    card_id: file!.visible_cards[index].id,
-                    content: content,
-                    drafts: [drafts, setDrafts],
-                    onCommit: cb,
-                  });
-                }}
-              />
-            );
-          default:
-            return null;
-        }
-      })()}
+            const i =
+              ind < 0
+                ? 0
+                : ind > file.visible_cards.length - 1
+                ? file.visible_cards.length - 1
+                : ind;
+
+            dispatchWindows({
+              type: "set_file_window",
+              window_index: windows.active,
+              window: { index: i },
+            });
+          }}
+          onCommit={(id, content, cb) => {
+            commit({
+              cache: [savingCards, setSavingCards],
+              card_id: id,
+              content: content,
+              drafts: [drafts, setDrafts],
+              onCommit: cb,
+            });
+          }}
+        />
+      )}
     </EditorWindowSizeContext.Provider>
   );
 };

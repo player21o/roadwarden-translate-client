@@ -12,37 +12,59 @@ export type File = {
 
 export type Files = { [name: string]: File };
 
+// in hooks/FetchFile.ts
+
 const useFetchFile = (
-  name: string,
+  name: string | null | undefined, // Allow name to be null/undefined
   cache?: Files,
   setCache?: (arg0: Files) => void
 ) => {
-  const [file, setFile] = useState<null | File>(
-    cache != undefined && name in cache ? cache[name] : null
-  );
+  const [file, setFile] = useState<null | File>(() => {
+    if (!name) return null;
+    return cache?.[name] ?? null;
+  });
 
   useEffect(() => {
-    if (file == null) {
-      prot.send("get_file", { name: name }).then((p) => {
-        if (p.file != undefined && p.original_file != undefined) {
-          const sorted = p.file.sort(
-            ({ line_start: a }, { line_start: b }) => a - b
-          );
-
-          const return_file: File = {
-            cards: sorted,
-            visible_cards: sorted.filter((c) => !c.hidden),
-            name: name,
-            original: p.original_file,
-            card_ids: Object.fromEntries(sorted.map((s) => [s.id, s])),
-          };
-
-          setFile(return_file);
-          setCache?.({ ...cache, [name]: return_file });
-        }
-      });
+    if (!name || file?.name === name) {
+      return;
     }
-  }, [name, file, cache, setCache]);
+
+    setFile(null);
+
+    if (cache?.[name]) {
+      setFile(cache[name]);
+      return;
+    }
+
+    let isMounted = true;
+    prot.send("get_file", { name: name }).then((p) => {
+      if (!isMounted) return;
+
+      if (p.file != undefined && p.original_file != undefined) {
+        const sorted = p.file.sort(
+          ({ line_start: a }, { line_start: b }) => a - b
+        );
+        const return_file: File = {
+          cards: sorted,
+          visible_cards: sorted.filter((c) => !c.hidden),
+          name: name,
+          original: p.original_file,
+          card_ids: Object.fromEntries(sorted.map((s) => [s.id, s])),
+        };
+
+        setFile(return_file);
+        setCache?.({ ...cache, [name]: return_file });
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [name, cache, setCache]);
+
+  if (name !== file?.name) {
+    return null;
+  }
 
   return file;
 };

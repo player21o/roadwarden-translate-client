@@ -17,8 +17,16 @@ export function useAuthUser() {
         .send("login", { method: "session", token: session })
         .then((answer) => {
           if (answer.user_id !== undefined) {
-            setUser({ id: answer.user_id, authenticated: true });
-            setStatus(200);
+            prot
+              .send("get_user", { user_id: answer.user_id })
+              .then((user_data) => {
+                setUser({
+                  id: answer.user_id!,
+                  authenticated: true,
+                  data: user_data.user!,
+                });
+                setStatus(200);
+              });
           } else {
             lc.remove("session");
             setStatus(400);

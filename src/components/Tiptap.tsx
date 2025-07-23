@@ -1,4 +1,4 @@
-import { BubbleMenu, useEditor, EditorContent } from "@tiptap/react";
+import { BubbleMenu, useEditor, EditorContent, Editor } from "@tiptap/react";
 import { Gender } from "../nodes/gender_mark";
 import { Color } from "../nodes/color_mark";
 import { Space } from "../nodes/space_mark";
@@ -18,6 +18,7 @@ interface Props {
   height: number;
   colors: string[] | null;
   disabled: boolean;
+  onCreate?: (e: Editor) => void;
   onUpdate?: (arg0: string) => void;
 }
 
@@ -59,6 +60,7 @@ const Tiptap = ({
   height,
   colors,
   disabled,
+  onCreate,
   onUpdate,
 }: Props) => {
   const editor = useEditor(
@@ -86,6 +88,7 @@ const Tiptap = ({
           onUpdate?.(editor.getHTML());
         }
       },
+      onCreate: onCreate ? (p) => onCreate(p.editor) : undefined,
     },
     [content]
   );

@@ -341,7 +341,6 @@ import EditorWindow from "./EditorWindow";
 import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 import EditorCardJump from "./EditorCardJump";
 import UserContext from "../contexts/UserContext";
-import useGetUser from "../hooks/GetUser";
 import { UserPermission } from "../protocol/packets";
 import {
   convert_html_to_tags,
@@ -359,9 +358,9 @@ interface Props {
   file: File | null;
   drafts: Drafts;
   pastCards: number[];
-  setCardIndex: (index: number) => void;
-  setDraft: (draft: string) => void;
-  onCommit: (content: string, cb: () => any) => void;
+  setCardIndexNormal: (index: number, file: File | null) => void;
+  setDraft: (id: number, draft: string) => void;
+  onCommit: (id: number, content: string, cb: () => any) => void;
   //setPastCards: number[];
 }
 
@@ -372,13 +371,13 @@ const EditorCard = ({
   pastCards,
   onCommit,
   setDraft,
-  setCardIndex,
+  setCardIndexNormal,
 }: Props) => {
   const { window_width, window_height, screen_width, screen_height } =
     useContext(EditorWindowSizeContext);
 
   const { user } = useContext(UserContext);
-  const me = useGetUser(user.id);
+  const me = user.data;
 
   const [saving, setSaving] = useState(false);
   const [jump, setJump] = useState(false);
@@ -396,13 +395,26 @@ const EditorCard = ({
 
   const translation = useMemo<string | undefined>(() => {
     if (file != null && card != undefined) {
-      return card.id in drafts
+      return card.id.toString() in drafts
         ? drafts[card.id]
         : convert_tags_to_html(card.translation);
     }
   }, [cardIndex, file]);
 
   const slider = useRef(null);
+
+  const setCardIndex = (ind: number) => {
+    if (file == null) return;
+
+    const i =
+      ind < 0
+        ? 0
+        : ind > file.visible_cards.length - 1
+        ? file.visible_cards.length - 1
+        : ind;
+
+    setCardIndexNormal(i, file);
+  };
 
   function dragElement(elmnt: HTMLElement) {
     var pos1 = 0,
@@ -457,13 +469,43 @@ const EditorCard = ({
     };
   }, [slider.current, file]);
 
-  useHotkeys("mod+arrowdown", () => setCardIndex(cardIndex + 1), {
-    enableOnContentEditable: true,
-  });
+  useHotkeys(
+    "mod+arrowdown",
+    () => setCardIndex(cardIndex + 1),
+
+    {
+      enableOnContentEditable: true,
+    }
+  );
 
   useHotkeys("mod+arrowup", () => setCardIndex(cardIndex - 1), {
     enableOnContentEditable: true,
   });
+
+  useHotkeys("mod+o", () => setJump(jump ? false : true), {
+    preventDefault: true,
+  });
+
+  useHotkeys(
+    "mod+s",
+    () => {
+      if (card == undefined) return;
+
+      setSaving(true);
+      onCommit(
+        card.id,
+        convert_html_to_tags(
+          drafts[card.id],
+          card.original.search("(disabled)") == -1
+        ),
+        () => setSaving(false)
+      );
+    },
+    {
+      enableOnContentEditable: true,
+      preventDefault: true,
+    }
+  );
 
   return (
     <EditorWindow
@@ -491,6 +533,7 @@ const EditorCard = ({
                 onClick={() => {
                   setSaving(true);
                   onCommit(
+                    card.id,
                     convert_html_to_tags(
                       drafts[card.id],
                       card.original.search("(disabled)") == -1
@@ -543,9 +586,10 @@ const EditorCard = ({
               height={window_height - 160}
               content={translation!}
               className="float-right mr-4"
-              onUpdate={(content) => setDraft(content)}
+              onUpdate={(content) => setDraft(card.id, content)}
               colors={[...new Set(card.original.match(/#....../g))] as string[]}
               disabled={card.original.search("(disabled)") != -1}
+              onCreate={(e) => e.commands.focus(999, {})}
               editable
             />
           </div>
