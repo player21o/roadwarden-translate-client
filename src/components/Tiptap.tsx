@@ -9,6 +9,7 @@ import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import { VariableNode } from "../nodes/variable_node";
 import { ReactNode } from "react";
+import { isNumeric } from "../utils/utilities";
 
 interface Props {
   editable: boolean;
@@ -93,6 +94,28 @@ const Tiptap = ({
     [content]
   );
 
+  const toggleItalic = () => editor!.chain().focus().toggleItalic().run();
+  const toggleBold = () => editor!.chain().focus().toggleBold().run();
+  const toggleGender = () =>
+    editor!
+      .chain()
+      .focus()
+      .setMark("gender", { type: "male" })
+      .insertContentAt(
+        editor!.state.selection.$to.pos,
+        '|<gender type="female">Женщина</gender>'
+      )
+      .run();
+  const toggleColor = (color: string) => () =>
+    editor!.chain().focus().toggleMark("color", { color }).run();
+
+  const bubbleMenuKeys: (() => void)[] = [
+    toggleItalic,
+    toggleBold,
+    toggleGender,
+    ...(colors != undefined ? colors.map((col) => toggleColor(col)) : []),
+  ];
+
   return (
     <div>
       {editor && (
@@ -107,38 +130,22 @@ const Tiptap = ({
         >
           <div className="flex flex-row first:rounded-l-2xl last:rounded-r-2xl">
             <BubbleMenuButton
-              onClick={() => editor.chain().focus().toggleItalic().run()}
+              onClick={toggleItalic}
               icon="format_italic"
               active={editor.isActive("italic")}
             />
             <BubbleMenuButton
-              onClick={() => editor.chain().focus().toggleBold().run()}
+              onClick={toggleBold}
               icon="format_bold"
               active={editor.isActive("bold")}
             />
-            <BubbleMenuButton
-              onClick={() =>
-                editor
-                  .chain()
-                  .focus()
-                  .setMark("gender", { type: "male" })
-                  .insertContentAt(
-                    editor.state.selection.$to.pos,
-                    '|<gender type="female">Женщина</gender>'
-                  )
-                  .run()
-              }
-              icon="transgender"
-            />
+            <BubbleMenuButton onClick={toggleGender} icon="transgender" />
             {colors &&
               !disabled &&
               colors.map((color) => (
                 <BubbleMenuButton
                   key={color}
-                  onClick={() => {
-                    console.log(color);
-                    editor.chain().focus().toggleMark("color", { color }).run();
-                  }}
+                  onClick={toggleColor(color)}
                   active={editor.isActive("color", { color: color })}
                 >
                   <div
@@ -161,6 +168,17 @@ const Tiptap = ({
           } text-2xl relative leading-7 border-chestnut border-2 overflow-x-auto p-2 ` +
           className
         }
+        onKeyDown={(e) => {
+          if (!editor?.state.selection.empty) {
+            if (
+              isNumeric(e.key) &&
+              parseInt(e.key) - 1 <= bubbleMenuKeys.length - 1
+            ) {
+              e.preventDefault();
+              bubbleMenuKeys[parseInt(e.key) - 1]();
+            }
+          }
+        }}
       />
     </div>
   );

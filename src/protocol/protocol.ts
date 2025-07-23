@@ -121,20 +121,17 @@ export class Protocol {
       },
       ws: WsType
     ) => any
-    //rate_limit = 0
   ) {
-    /*
-    this.event_emitter_rate_limits[track_num] = {
-      interval: rate_limit,
-      last_packet: Date.now(),
-    };
-    */
-
-    return this.event_emitter.on(track.toString(), callback);
+    // The EventEmitter's `on` method is what we want. It adds a listener.
+    this.event_emitter.on(track.toString(), callback);
   }
 
-  public off(track: keyof typeof tracks) {
-    this.event_emitter.removeAllListeners(track);
+  public off<T extends keyof typeof tracks>(
+    track: T,
+    callback: (...args: any[]) => void // A generic function type for the listener
+  ) {
+    // Use `removeListener` for surgical removal, NOT `removeAllListeners`.
+    this.event_emitter.removeListener(track.toString(), callback);
   }
 
   private encode_packet(packet: FullPacket) {

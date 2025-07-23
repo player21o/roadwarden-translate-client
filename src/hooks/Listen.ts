@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tracks } from "../protocol/packets";
 import { WsType } from "../protocol/ws_type";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { prot } from "../protocol/client";
 
 const useListen = <T extends keyof typeof tracks>(
@@ -15,11 +15,12 @@ const useListen = <T extends keyof typeof tracks>(
   ) => any,
   deps: any[]
 ) => {
-  useEffect(() => {
-    prot.listen(track, callback);
+  const memoizedCallback = useCallback(callback, deps);
 
-    return () => prot.off(track);
-  }, deps);
+  useEffect(() => {
+    prot.listen(track, memoizedCallback);
+    return () => prot.off(track, memoizedCallback);
+  }, [track, memoizedCallback]);
 };
 
 export default useListen;

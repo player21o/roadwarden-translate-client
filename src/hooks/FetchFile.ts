@@ -15,7 +15,7 @@ export type Files = { [name: string]: File };
 // in hooks/FetchFile.ts
 
 const useFetchFile = (
-  name: string | null | undefined, // Allow name to be null/undefined
+  name: string | null | undefined,
   cache?: Files,
   setCache?: (arg0: Files) => void
 ) => {
@@ -25,15 +25,15 @@ const useFetchFile = (
   });
 
   useEffect(() => {
-    if (!name || file?.name === name) {
+    if (!name) {
       return;
     }
-
-    setFile(null);
 
     if (cache?.[name]) {
       setFile(cache[name]);
       return;
+    } else {
+      setFile(null);
     }
 
     let isMounted = true;
@@ -41,15 +41,12 @@ const useFetchFile = (
       if (!isMounted) return;
 
       if (p.file != undefined && p.original_file != undefined) {
-        const sorted = p.file.sort(
-          ({ line_start: a }, { line_start: b }) => a - b
-        );
         const return_file: File = {
-          cards: sorted,
-          visible_cards: sorted.filter((c) => !c.hidden),
+          cards: p.file,
+          visible_cards: p.file.filter((c) => !c.hidden),
           name: name,
           original: p.original_file,
-          card_ids: Object.fromEntries(sorted.map((s) => [s.id, s])),
+          card_ids: Object.fromEntries(p.file.map((s) => [s.id, s])),
         };
 
         setFile(return_file);

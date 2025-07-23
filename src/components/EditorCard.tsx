@@ -536,7 +536,7 @@ const EditorCard = ({
                     card.id,
                     convert_html_to_tags(
                       drafts[card.id],
-                      card.original.search("(disabled)") == -1
+                      card.original.search("(disabled)") != -1
                     ),
                     () => setSaving(false)
                   );

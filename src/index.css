@@ -132,7 +132,3 @@ space {
   background-repeat: no-repeat;
   background-size: 30px;
 }
-
-.tiptap p:last-child:has(br:first-child:last-child) {
-  display: none;
-}
