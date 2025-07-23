@@ -171,7 +171,7 @@ const EditorCard = ({
           <hr className="border-chestnut" />
           <div>
             <IconButton
-              className="!text-4xl"
+              className="text-4xl!"
               tooltip="Искать в файле... (Ctrl + F)"
               placement="bottom"
               onClick={onJump}
@@ -179,7 +179,7 @@ const EditorCard = ({
               search
             </IconButton>
             <IconButton
-              className="!text-4xl"
+              className="text-4xl!"
               tooltip="Вставить переменную (Ctrl + V)"
               placement="bottom"
               onClick={onJump}
@@ -239,19 +239,19 @@ const EditorCard = ({
                 </p>
               )}
               <IconButton
-                className="!text-4xl !m-0"
+                className="text-4xl! m-0!"
                 tooltip="Предыдущая карточка (Ctrl + ↑)"
                 placement="bottom"
-                btnClassName="!m-0"
+                btnClassName="m-0!"
                 onClick={() => goToCard(-1)}
               >
                 move_up
               </IconButton>
               <IconButton
-                className="!text-4xl !m-0"
+                className="text-4xl! m-0!"
                 tooltip="Перейти к карточке... (Ctrl + O)"
                 placement="bottom"
-                btnClassName="!m-0"
+                btnClassName="m-0!"
                 onClick={(e) => {
                   (e.target as any).blur();
                   (e.currentTarget as any).blur();
@@ -261,10 +261,10 @@ const EditorCard = ({
                 swap_horiz
               </IconButton>
               <IconButton
-                className="!text-4xl !m-0"
+                className="text-4xl! m-0!"
                 tooltip="Следующая карточка (Ctrl + ↓)"
                 placement="bottom"
-                btnClassName="!m-0"
+                btnClassName="m-0!"
                 onClick={() => goToCard(1)}
               >
                 move_down
@@ -555,7 +555,7 @@ const EditorCard = ({
           <hr className="border-chestnut" />
           <div>
             <IconButton
-              className="!text-4xl"
+              className="text-4xl!"
               tooltip="Искать в файле... (Ctrl + F)"
               placement="bottom"
               onClick={() => setJump(true)}
@@ -563,7 +563,7 @@ const EditorCard = ({
               search
             </IconButton>
             <IconButton
-              className="!text-4xl"
+              className="text-4xl!"
               tooltip="Вставить переменную (Ctrl + V)"
               placement="bottom"
               onClick={() => setJump(true)}
@@ -617,19 +617,19 @@ const EditorCard = ({
                 </p>
               )}
               <IconButton
-                className="!text-4xl !m-0"
+                className="text-4xl! m-0!"
                 tooltip="Предыдущая карточка (Ctrl + ↑)"
                 placement="bottom"
-                btnClassName="!m-0"
+                btnClassName="m-0!"
                 onClick={() => setCardIndex(cardIndex - 1)}
               >
                 move_up
               </IconButton>
               <IconButton
-                className="!text-4xl !m-0"
+                className="text-4xl! m-0!"
                 tooltip="Перейти к карточке... (Ctrl + O)"
                 placement="bottom"
-                btnClassName="!m-0"
+                btnClassName="m-0!"
                 onClick={(e) => {
                   (e.target as any).blur();
                   (e.currentTarget as any).blur();
@@ -639,10 +639,10 @@ const EditorCard = ({
                 swap_horiz
               </IconButton>
               <IconButton
-                className="!text-4xl !m-0"
+                className="text-4xl! m-0!"
                 tooltip="Следующая карточка (Ctrl + ↓)"
                 placement="bottom"
-                btnClassName="!m-0"
+                btnClassName="m-0!"
                 onClick={() => setCardIndex(cardIndex + 1)}
               >
                 move_down

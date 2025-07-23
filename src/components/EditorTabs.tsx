@@ -26,7 +26,7 @@ const EditorTabs = ({
   const addWindowButton = useMemo(
     () => (
       <IconButton
-        btnClassName="!m-0 align-middle"
+        btnClassName="m-0! align-middle"
         tooltip="Открыть карточку"
         onClick={onNewWindow}
       >

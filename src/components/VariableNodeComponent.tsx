@@ -4,7 +4,7 @@ const VariableNodeComponent = () => {
   return (
     <NodeViewWrapper
       as={"span"}
-      className="bg-gradient-to-t from-gray-900 to-gray-800 rounded text-white cursor-pointer p-1"
+      className="bg-linear-to-t from-gray-900 to-gray-800 rounded text-white cursor-pointer p-1"
       contentEditable={false} // Blocks editing
       style={
         {
