@@ -1,3 +1,4 @@
+/*
 import { useHotkeys } from "react-hotkeys-hook";
 import useFetchFile, { Files } from "../hooks/FetchFile";
 import { Drafts, FileWindow } from "../utils/localstorage";
@@ -161,3 +162,4 @@ const EditorCardController = ({
 };
 
 export default EditorCardController;
+*/

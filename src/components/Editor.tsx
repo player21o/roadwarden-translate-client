@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Files } from "../hooks/FetchFile";
+import useFetchFile, { Files } from "../hooks/FetchFile";
 import { Drafts, FileWindow, get_or_default, lc } from "../utils/localstorage";
 import useHandleUpdates from "../hooks/HandleUpdates";
-import EditorCardController from "./EditorCardController";
 import EditorTabs from "./EditorTabs";
 import useWindowDimensions from "../hooks/WindowDimensions";
 import { clamp_number } from "../utils/utilities";
@@ -10,6 +9,8 @@ import EditorWindowSizeContext from "../contexts/EditorWindowSize";
 import IconButton from "./IconButton";
 import { useReducer } from "react";
 import windows_reducer, { Action } from "../reducers/windows_reducer";
+import EditorCard from "./EditorCard";
+import commit from "../utils/commit";
 
 const Editor = () => {
   const { width, height } = useWindowDimensions();
@@ -81,7 +82,65 @@ const Editor = () => {
         onCloseWindow={(index) => dispatchWindows({ type: "remove", index })}
         onFocusWindow={(index) => dispatchWindows({ type: "focus", index })}
       />
-      {windows.windows[windows.active].type == "file" ? (
+      {(() => {
+        switch (windows.windows[windows.active].type) {
+          case "file":
+            const file = useFetchFile(
+              (windows.windows[windows.active] as FileWindow).file,
+              files,
+              setFiles
+            );
+            const index = (windows.windows[windows.active] as FileWindow).index;
+            return (
+              <EditorCard
+                drafts={drafts}
+                file={file}
+                cardIndex={index}
+                pastCards={
+                  (windows.windows[windows.active] as FileWindow).past_cards
+                }
+                setDraft={(draft) =>
+                  setDrafts({
+                    ...drafts,
+                    [file!.visible_cards[index].id]: draft,
+                  })
+                }
+                setCardIndex={(ind) => {
+                  const i =
+                    ind < 0
+                      ? 0
+                      : ind > file!.visible_cards.length - 1
+                      ? file!.visible_cards.length - 1
+                      : ind;
+
+                  dispatchWindows({
+                    type: "set_file_window",
+                    window_index: windows.active,
+                    window: { index: i },
+                  });
+                }}
+                onCommit={(content, cb) => {
+                  commit({
+                    cache: [savingCards, setSavingCards],
+                    card_id: file!.visible_cards[index].id,
+                    content: content,
+                    drafts: [drafts, setDrafts],
+                    onCommit: cb,
+                  });
+                }}
+              />
+            );
+          default:
+            return null;
+        }
+      })()}
+    </EditorWindowSizeContext.Provider>
+  );
+};
+
+export default Editor;
+
+/*
         <EditorCardController
           drafts={drafts}
           files={files}
@@ -123,10 +182,4 @@ const Editor = () => {
             }
           }}
           window={windows.windows[windows.active] as FileWindow}
-        />
-      ) : null}
-    </EditorWindowSizeContext.Provider>
-  );
-};
-
-export default Editor;
+        />*/

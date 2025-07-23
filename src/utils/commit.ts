@@ -22,6 +22,7 @@ const commit = ({
   prot
     .send("commit", { card_id: card_id, content: content })
     .then(({ status }) => {
+      console.log("received answer!");
       setCache(cache.filter((v) => v != card_id));
 
       if (status == Status.success) {

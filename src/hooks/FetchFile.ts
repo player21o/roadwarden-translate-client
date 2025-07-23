@@ -17,12 +17,12 @@ const useFetchFile = (
   cache?: Files,
   setCache?: (arg0: Files) => void
 ) => {
-  const [file, setFile] = useState<null | File>(null);
+  const [file, setFile] = useState<null | File>(
+    cache != undefined && name in cache ? cache[name] : null
+  );
 
   useEffect(() => {
-    if (cache != undefined && name in cache) {
-      setFile(cache[name]);
-    } else {
+    if (file == null) {
       prot.send("get_file", { name: name }).then((p) => {
         if (p.file != undefined && p.original_file != undefined) {
           const sorted = p.file.sort(
@@ -42,7 +42,7 @@ const useFetchFile = (
         }
       });
     }
-  }, [cache]);
+  }, [name, file, cache, setCache]);
 
   return file;
 };
