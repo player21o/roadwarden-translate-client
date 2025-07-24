@@ -1,4 +1,4 @@
-import { BubbleMenu, useEditor, EditorContent, Editor } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import { Gender } from "../nodes/gender_mark";
 import { Color } from "../nodes/color_mark";
 import { Space } from "../nodes/space_mark";
@@ -10,6 +10,7 @@ import Text from "@tiptap/extension-text";
 import { VariableNode } from "../nodes/variable_node";
 import { ReactNode } from "react";
 import { isNumeric } from "../utils/utilities";
+import { BubbleMenu } from "@tiptap/react/menus";
 
 interface Props {
   editable: boolean;
@@ -119,15 +120,7 @@ const Tiptap = ({
   return (
     <div>
       {editor && (
-        <BubbleMenu
-          editor={editor}
-          tippyOptions={{
-            //appendTo: document.body,
-            duration: 100,
-            delay: 0,
-            //interactive: true,
-          }}
-        >
+        <BubbleMenu editor={editor}>
           <div className="flex flex-row first:rounded-l-2xl last:rounded-r-2xl">
             <BubbleMenuButton
               onClick={toggleItalic}

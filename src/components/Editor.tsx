@@ -66,6 +66,7 @@ const Editor = () => {
               },
             })
           }
+          tooltip={"Открыть файл"}
         >
           add
         </IconButton>

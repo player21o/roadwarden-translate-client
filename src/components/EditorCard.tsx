@@ -547,7 +547,7 @@ const EditorCard = ({
                 {saving ? <Spinner /> : <h2 className="relative">Сохранить</h2>}
               </button>
             )}
-            <h1 className="text-3xl font-bold text-brightpale mt-2">
+            <h1 className="text-3xl! font-bold text-brightpale mt-2">
               {file.name}{" "}
               <span className="text-gray-400">- карточка #{cardIndex + 1}</span>
             </h1>

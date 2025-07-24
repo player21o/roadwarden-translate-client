@@ -1,15 +1,31 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@theme {
+  --color-dark: #081823;
+  --color-chestnut: #786776;
+  --color-darkblue: #0e2a3f;
+  --color-darkdarkblue: #0d2639;
+  --color-brightpale: #f6d6be;
+  --color-pale: rgb(195, 163, 138);
+  --color-darkpale: #ad9192;
+  --color-disabled: rgb(102, 103, 104);
+
+  --font-philosopher: "Philosopher";
+  --font-spacedots: "SpaceDots";
+  --font-editor: "Philosopher", "SpaceDots";
+}
 
 @layer base {
   h1 {
-    @reference text-2xl;
+    font-size: var(--text-2xl);
   }
   h2 {
-    @reference text-xl;
+    font-size: var(--text-xl);
   }
   h3 {
-    @reference text-lg;
+    font-size: var(--text-lg);
   }
+
   a {
     @reference text-blue-600 underline;
   }
