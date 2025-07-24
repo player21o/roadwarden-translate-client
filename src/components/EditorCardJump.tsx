@@ -53,7 +53,7 @@ const EditorCardJump = ({ file, onJump }: Props) => {
   }, [handleKey]); // Only re-run if handleKey changes
 
   return (
-    <div className="backdrop-blur-sm absolute z-50 bg-black bg-opacity-30 w-full h-full pointer-events-auto flex flex-col justify-center  items-center leading-[normal] text-base">
+    <div className="backdrop-blur-sm absolute z-50 bg-black/30 w-full h-full pointer-events-auto flex flex-col justify-center  items-center leading-[normal] text-base">
       {cardNum.length > 0 ? (
         <>
           <h2>Вы перейдете к:</h2>

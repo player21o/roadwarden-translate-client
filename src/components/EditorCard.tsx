@@ -475,15 +475,18 @@ const EditorCard = ({
 
     {
       enableOnContentEditable: true,
+      preventDefault: true,
     }
   );
 
   useHotkeys("mod+arrowup", () => setCardIndex(cardIndex - 1), {
     enableOnContentEditable: true,
+    preventDefault: true,
   });
 
   useHotkeys("mod+o", () => setJump(jump ? false : true), {
     preventDefault: true,
+    enableOnContentEditable: true,
   });
 
   useHotkeys(

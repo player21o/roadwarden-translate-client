@@ -23,24 +23,14 @@ export const Gender = Mark.create<GenderNodeAttributes>({
       "gender",
       mergeAttributes(
         {
-          class: `bg-opacity-45 ${
-            HTMLAttributes.type == "male" ? "bg-blue-500" : "bg-pink-500"
+          class: `${
+            HTMLAttributes.type == "male" ? "bg-blue-500/45" : "bg-pink-500/45"
           }`,
         },
         HTMLAttributes
       ),
       0,
     ];
-  },
-
-  addCommand() {
-    return {
-      appendGender: () => () => {
-        return this.editor.commands.insertContent(
-          '<gender type="male">Мужчина</gender>|<gender type="female">Женщина</gender>'
-        );
-      },
-    };
   },
 
   addKeyboardShortcuts() {

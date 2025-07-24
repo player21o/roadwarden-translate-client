@@ -45,7 +45,7 @@ const BubbleMenuButton = ({
       } active w-10 h-10 hover:cursor-pointer  text-center select-none`}
     >
       {icon && (
-        <p className="material-icons align-middle focus:translate-y-1">
+        <p className="material-icons align-middle focus:translate-y-1 text-white">
           {icon}
         </p>
       )}
